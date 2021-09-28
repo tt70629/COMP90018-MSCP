@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,8 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.icooking.Inventory;
+import com.example.icooking.R;
 import com.example.icooking.databinding.FragmentDashboardBinding;
 import com.example.icooking.helper.InventoryItemTouchHelperCallBack;
+import com.example.icooking.helper.RecyclerTouchListener;
 
 import java.util.ArrayList;
 
@@ -53,13 +57,46 @@ public class DashboardFragment extends Fragment {
         adaptor.setInventory(inventory);
         recviewInventory.setAdapter(adaptor);
         recviewInventory.setLayoutManager( new LinearLayoutManager(getContext()));
-        recviewInventory.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));//horizontal line between items.
+
         /*
          * use ItemTouchHelper to realize animation effect...
          */
-        ItemTouchHelper.Callback callback = new InventoryItemTouchHelperCallBack(adaptor);
-        ItemTouchHelper inventoryItemTouchHelper = new ItemTouchHelper(callback);
-        inventoryItemTouchHelper.attachToRecyclerView(recviewInventory);
+        //ItemTouchHelper.Callback callback = new InventoryItemTouchHelperCallBack(adaptor,getContext());
+        //ItemTouchHelper inventoryItemTouchHelper = new ItemTouchHelper(callback);
+        //inventoryItemTouchHelper.attachToRecyclerView(recviewInventory);
+        /*
+         * use RecyclerTouchListener to realize swipe and operation like deleting and editing ...
+         */
+        RecyclerTouchListener touchListener = new RecyclerTouchListener(getActivity(),recviewInventory);
+        touchListener
+                .setClickable(new RecyclerTouchListener.OnRowClickListener() {
+                    @Override
+                    public void onRowClicked(int position) {
+                        Toast.makeText(getContext(),inventory.get(position).getIngredientName(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onIndependentViewClicked(int independentViewID, int position) {
+
+                    }
+                })
+                .setSwipeOptionViews(R.id.delete_box,R.id.edit_box)
+                .setSwipeable(R.id.upperLayout, R.id.lowerLayout, new RecyclerTouchListener.OnSwipeOptionsClickListener() {
+                    @Override
+                    public void onSwipeOptionClicked(int viewID, int position) {
+                        switch (viewID){
+                            case R.id.delete_box:
+                                inventory.remove(position);
+                                adaptor.setInventory(inventory);
+                                break;
+                            case R.id.edit_box:
+                                Toast.makeText(getContext(),"Edit Not Available",Toast.LENGTH_SHORT).show();
+                                break;
+
+                        }
+                    }
+                });
+        recviewInventory.addOnItemTouchListener(touchListener);
         return root;
     }
 
