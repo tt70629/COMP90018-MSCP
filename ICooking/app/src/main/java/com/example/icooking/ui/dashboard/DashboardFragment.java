@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DashboardFragment extends Fragment implements InventoryAdaptor.OnItemClickHandler {
 
@@ -161,10 +162,13 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
                             btnSubmit.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    //addItem(new Inventory(etName.getText().toString(),etDay.getText().toString()));
+                                    //Inventory newInventory=new Inventory(etName.getText().toString(),etDay.getText().toString());
+                                    HashMap<String,Object> hashMapInventory= new HashMap<>();
+                                    hashMapInventory.put("ingredientName",etName.getText().toString());
+                                    hashMapInventory.put("dayLeft",etDay.getText().toString());
                                     assert etName != null;
                                     assert etDay != null;
-                                    daoInventory.add( new Inventory(etName.getText().toString(),etDay.getText().toString()) )
+                                    daoInventory.update( editInventory.getKey(),hashMapInventory)
                                             .addOnSuccessListener(success -> {
                                                 Toast.makeText(getContext(),"Update ingredient successfully",Toast.LENGTH_SHORT).show();
                                                 bottomSheetDialog.dismiss();
