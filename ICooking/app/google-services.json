@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "90620150531",
+    "project_id": "icooking-db",
+    "storage_bucket": "icooking-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90620150531:android:44188fa59948ab833ddf36",
+        "android_client_info": {
+          "package_name": "com.example.icooking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90620150531-9hkf2mlfq470q8t9tj04sdb51dlog8pt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4PFwl_sPPtVEOGMZcjqMmq2_a3DcL2EI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90620150531-9hkf2mlfq470q8t9tj04sdb51dlog8pt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

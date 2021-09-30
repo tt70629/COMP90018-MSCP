@@ -1,23 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.dashboard.DashboardFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/coordinatorLayout"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
-    <TextView
-        android:id="@+id/text_dashboard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="20sp" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recview_Inventory"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingBottom="72dp"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_Inventory"
+        android:layout_width="wrap_content"
+        android:layout_height="217dp"
+        android:layout_gravity="bottom|end"
+        android:elevation="10dp"
+        android:layout_marginBottom="70dp"
+        android:src="@drawable/ic_add_black_24dp"
+        >
+
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

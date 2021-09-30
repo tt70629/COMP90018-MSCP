@@ -12,11 +12,14 @@
         <entry key="app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/round_button.xml" value="0.23055555555555557" />
+        <entry key="app/src/main/res/drawable/round_edittext.xml" value="0.23055555555555557" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.17046605876393112" />
+        <entry key="app/src/main/res/layout/botton_sheet_dialog.xml" value="0.26268115942028986" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.32842415251174356" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.11956521739130435" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.11956521739130435" />
-        <entry key="app/src/main/res/layout/inventory_list_item.xml" value="0.1752988047808765" />
+        <entry key="app/src/main/res/layout/inventory_list_item.xml" value="0.3916272788656313" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.19166666666666668" />
       </map>
     </option>

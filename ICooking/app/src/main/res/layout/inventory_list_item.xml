@@ -12,17 +12,17 @@
         android:layout_height="70dp"
         android:layout_alignParentRight="true"
         android:gravity="right"
-        android:padding="10dp"
+
         android:layout_margin="10dp"
-        android:background="#d65819"
         android:orientation="horizontal">
 
         <RelativeLayout
             android:id="@+id/edit_box"
-            android:layout_width="40dp"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             android:clickable="true"
             android:focusable="true"
+            android:background="@color/green"
             android:orientation="vertical">
 
             <LinearLayout
@@ -44,10 +44,11 @@
 
         <RelativeLayout
             android:id="@+id/delete_box"
-            android:layout_width="40dp"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             android:clickable="true"
             android:focusable="true"
+            android:background="@color/red"
             android:orientation="vertical">
 
             <LinearLayout

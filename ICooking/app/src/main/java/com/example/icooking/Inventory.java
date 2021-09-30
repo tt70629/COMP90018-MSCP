@@ -4,6 +4,9 @@ public class Inventory {
 
     private String ingredientName;
     private String dayLeft;
+    private String key;
+
+
 
     public Inventory(String ingredientName, String dayLeft) {
         this.ingredientName = ingredientName;
@@ -25,6 +28,13 @@ public class Inventory {
 
     public void setDayLeft(String dayLeft) {
         this.dayLeft = dayLeft;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+    public String getKey() {
+        return key;
     }
 }
 

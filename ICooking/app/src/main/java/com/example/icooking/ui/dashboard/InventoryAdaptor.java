@@ -19,6 +19,12 @@ import java.util.ArrayList;
 
 public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.ViewHolder>  {
     ArrayList<Inventory> inventory = new ArrayList<Inventory>();
+    OnItemClickHandler mOnItemClickListener;
+
+    public InventoryAdaptor(ArrayList<Inventory> inventory, OnItemClickHandler onItemClickHandler) {
+        this.inventory = inventory;
+        this.mOnItemClickListener=onItemClickHandler;
+    }
 
     @NonNull
     @Override
@@ -45,6 +51,7 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
 
 
 
+
     public class ViewHolder extends RecyclerView.ViewHolder  {
         private TextView ingredientName;
         private TextView leftDay;
@@ -54,9 +61,11 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
             ingredientName=itemView.findViewById(R.id.ingredientName);
             leftDay=itemView.findViewById(R.id.leftDay);
 
-
-
         }
 
+    }
+    interface OnItemClickHandler {
+        void addItem(Inventory inventory);
+        void removeItem(int position);
     }
 }
