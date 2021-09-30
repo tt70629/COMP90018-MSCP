@@ -18,11 +18,11 @@ import com.example.icooking.helper.ItemTouchHelperAdaptor;
 import java.util.ArrayList;
 
 public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.ViewHolder>  {
-    ArrayList<Inventory> inventory = new ArrayList<Inventory>();
+    ArrayList<Inventory> inventoryList = new ArrayList<>();
     OnItemClickHandler mOnItemClickListener;
 
-    public InventoryAdaptor(ArrayList<Inventory> inventory, OnItemClickHandler onItemClickHandler) {
-        this.inventory = inventory;
+
+    public InventoryAdaptor(OnItemClickHandler onItemClickHandler) {
         this.mOnItemClickListener=onItemClickHandler;
     }
 
@@ -35,17 +35,22 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-     holder.ingredientName.setText(inventory.get(position).getIngredientName());
-     holder.leftDay.setText(inventory.get(position).getDayLeft());
+     holder.ingredientName.setText(inventoryList.get(position).getIngredientName());
+     holder.leftDay.setText(inventoryList.get(position).getDayLeft());
+
     }
 
     @Override
     public int getItemCount() {
-        return inventory.size();
+        return inventoryList.size();
     }
 
-    public void setInventory(ArrayList<Inventory> inventory){
-        this.inventory=inventory;
+    public String getKey(int position){
+        return inventoryList.get(position).getKey();
+    }
+
+    public void setInventory(ArrayList<Inventory> inventoryList){
+        this.inventoryList=inventoryList;
         notifyDataSetChanged();
     }
 

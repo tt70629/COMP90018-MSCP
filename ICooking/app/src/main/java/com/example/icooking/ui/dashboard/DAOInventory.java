@@ -10,10 +10,11 @@ import java.util.HashMap;
 
 public class DAOInventory
 {
+    private final static String db_URL="https://icooking-db-default-rtdb.asia-southeast1.firebasedatabase.app/";
     private DatabaseReference databaseReference;
     public DAOInventory()
     {
-        FirebaseDatabase db =FirebaseDatabase.getInstance();
+        FirebaseDatabase db =FirebaseDatabase.getInstance(db_URL);
         databaseReference = db.getReference(Inventory.class.getSimpleName());
     }
     public Task<Void> add(Inventory inv)

@@ -1,9 +1,14 @@
 package com.example.icooking;
 
-public class Inventory {
+import com.google.firebase.database.Exclude;
+
+import java.io.Serializable;
+
+public class Inventory implements Serializable {
 
     private String ingredientName;
     private String dayLeft;
+    @Exclude
     private String key;
 
 
@@ -11,6 +16,10 @@ public class Inventory {
     public Inventory(String ingredientName, String dayLeft) {
         this.ingredientName = ingredientName;
         this.dayLeft = dayLeft;
+    }
+
+    public Inventory() {
+
     }
 
     public String getIngredientName() {
