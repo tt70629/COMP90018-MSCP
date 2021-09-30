@@ -145,7 +145,35 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
 
                             break;
                         case R.id.edit_box:
-                            Toast.makeText(getContext(),"Edit Not Available",Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getContext(),"Edit Not Available",Toast.LENGTH_SHORT).show();
+                            Inventory editInventory = adaptor.getInventory(position);
+                            bottomSheetDialog = new BottomSheetDialog(getContext());
+                            bottomSheetDialog.setContentView(R.layout.botton_sheet_dialog);
+                            bottomSheetDialog.setCanceledOnTouchOutside(false);
+                            bottomSheetDialog.setDismissWithAnimation(true);
+                            EditText etName= bottomSheetDialog.findViewById(R.id.et_ingredientName);
+                            EditText etDay= bottomSheetDialog.findViewById(R.id.et_leftDay);
+                            etName.setText(editInventory.getIngredientName());
+                            etDay.setText(editInventory.getDayLeft());
+                            Button btnSubmit= bottomSheetDialog.findViewById(R.id.btn_submit);
+                            btnSubmit.setText("Update");
+                            assert btnSubmit != null;
+                            btnSubmit.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    //addItem(new Inventory(etName.getText().toString(),etDay.getText().toString()));
+                                    assert etName != null;
+                                    assert etDay != null;
+                                    daoInventory.add( new Inventory(etName.getText().toString(),etDay.getText().toString()) )
+                                            .addOnSuccessListener(success -> {
+                                                Toast.makeText(getContext(),"Update ingredient successfully",Toast.LENGTH_SHORT).show();
+                                                bottomSheetDialog.dismiss();
+                                            }).addOnFailureListener(err->{
+                                        Toast.makeText(getContext(),err.getMessage(),Toast.LENGTH_SHORT).show();
+                                    });
+                                }
+                            });
+                            bottomSheetDialog.show();
                             break;
 
                     }

@@ -48,6 +48,9 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
     public String getKey(int position){
         return inventoryList.get(position).getKey();
     }
+    public Inventory getInventory(int position){
+        return inventoryList.get(position);
+    }
 
     public void setInventory(ArrayList<Inventory> inventoryList){
         this.inventoryList=inventoryList;
