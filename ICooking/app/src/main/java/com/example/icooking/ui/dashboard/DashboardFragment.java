@@ -47,30 +47,15 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
          * Set up view model, might be redundant...
          */
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+
         /*
          * Use data binding method...
          */
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-
-//        inventory= new ArrayList<>();
-//        inventory.add( new Inventory("milk","1"));
-//        inventory.add( new Inventory("ribeye steak","2"));
-//        inventory.add( new Inventory("chicken","2"));
-//        inventory.add( new Inventory("onion","3"));
-//        inventory.add( new Inventory("q","3"));
-//        inventory.add( new Inventory("o","3"));
-//        inventory.add( new Inventory("i","3"));
-
         /*
-         * set up TextView...
-         */
-
-//        final TextView textView = binding.textDashboard;
-//        dashboardViewModel.getText().observe(getViewLifecycleOwner(), s -> textView.setText(s));
-        /*
-         * set up RecyclerView...
+         * Set up RecyclerView then render data accessing from DAO
          */
         final RecyclerView recviewInventory= binding.recviewInventory;
         adaptor= new InventoryAdaptor(this);
@@ -79,16 +64,10 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
         daoInventory = new DAOInventory();
         fetchInventoryData();
 
-        /*
-         * use ItemTouchHelper to realize animation effect...
-         */
-        //ItemTouchHelper.Callback callback = new InventoryItemTouchHelperCallBack(adaptor,getContext());
-        //ItemTouchHelper inventoryItemTouchHelper = new ItemTouchHelper(callback);
-        //inventoryItemTouchHelper.attachToRecyclerView(recviewInventory);
 
 
         /*
-         * set up BottomSheetDialog...
+         * Set up addButton to trigger BottomSheetDialog for adding new ingredient
          */
         final FloatingActionButton addInventoryBtn= binding.addInventory;
         addInventoryBtn.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +101,7 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
             }
         });
         /*
-         * use RecyclerTouchListener to realize swipe and operations like deleting and editing ...
+         * use RecyclerTouchListener to realize operations like deleting and editing after swiping.
          */
         RecyclerTouchListener touchListener = new RecyclerTouchListener(getActivity(),recviewInventory);
         touchListener
@@ -141,12 +120,15 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
                 .setSwipeable(R.id.upperLayout, R.id.lowerLayout, (viewID, position) -> {
                     switch (viewID){
                         case R.id.delete_box:
+                            /*tip: The touchListener we used only deliver position as parameter, hence
+                             *we need to utilize methods from adaptor to get key to interact with DAO.
+                             */
                             String key=adaptor.getKey(position);
                             daoInventory.remove(key);
 
                             break;
                         case R.id.edit_box:
-                            //Toast.makeText(getContext(),"Edit Not Available",Toast.LENGTH_SHORT).show();
+
                             Inventory editInventory = adaptor.getInventory(position);
                             bottomSheetDialog = new BottomSheetDialog(getContext());
                             bottomSheetDialog.setContentView(R.layout.botton_sheet_dialog);
@@ -179,17 +161,16 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
                             });
                             bottomSheetDialog.show();
                             break;
-
                     }
                 });
         recviewInventory.addOnItemTouchListener(touchListener);
         return root;
     }
     /*
-     * method of fetching data from db...
+     * Method that fetches data from db then delivers it to inventoryAdaptor class
+     * to display as recyclerViews.
      */
     private void fetchInventoryData() {
-
 
         daoInventory.get(key).addValueEventListener(new ValueEventListener() {
             @Override
@@ -202,13 +183,10 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
                 }
                 adaptor.setInventory(inventoryList);
                 adaptor.notifyDataSetChanged();
-
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
@@ -220,7 +198,8 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
         binding = null;
     }
     /*
-     * Implement from InventoryAdaptor.OnItemClickHandler
+     * Methods that are implemented from InventoryAdaptor.OnItemClickHandler, however these methods
+     * were used in interacting with pseudo data that is no longer in use.
      */
     @Override
     public void addItem(Inventory inv) {

@@ -45,20 +45,6 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
         return inventoryList.size();
     }
 
-    public String getKey(int position){
-        return inventoryList.get(position).getKey();
-    }
-    public Inventory getInventory(int position){
-        return inventoryList.get(position);
-    }
-
-    public void setInventory(ArrayList<Inventory> inventoryList){
-        this.inventoryList=inventoryList;
-        notifyDataSetChanged();
-    }
-
-
-
 
     public class ViewHolder extends RecyclerView.ViewHolder  {
         private TextView ingredientName;
@@ -72,8 +58,26 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
         }
 
     }
+    /*
+     * This interface is used when data is processed in activity.
+     * Not in used for now.
+     */
     interface OnItemClickHandler {
         void addItem(Inventory inventory);
         void removeItem(int position);
+    }
+    /*
+     * These getters and setter are for activities or fragments to
+     * operate with inventory list from DB
+     */
+    public String getKey(int position){
+        return inventoryList.get(position).getKey();
+    }
+    public Inventory getInventory(int position){
+        return inventoryList.get(position);
+    }
+    public void setInventory(ArrayList<Inventory> inventoryList){
+        this.inventoryList=inventoryList;
+        notifyDataSetChanged();
     }
 }
