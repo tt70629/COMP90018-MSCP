@@ -92,11 +92,11 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
     public class LinearViewHolderText extends RecyclerView.ViewHolder{
         private TextView textView;
-        private ImageView imageView;
+        //private ImageView imageView;
         public LinearViewHolderText(@NonNull @NotNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.tv_recipe_text);
-            imageView = itemView.findViewById(R.id.iv_recipe_image);
+            //imageView = itemView.findViewById(R.id.iv_recipe_image);
         }
     }
 
@@ -107,4 +107,5 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             imageView = itemView.findViewById(R.id.iv_recipe_image);
         }
     }
+
 }

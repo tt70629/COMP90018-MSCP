@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.icooking.Inventory;
 import com.example.icooking.R;
+import com.example.icooking.ui.dashboard.DAOInventory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,31 +29,38 @@ public class Recipe extends AppCompatActivity {
     private ImageView ivDemo;
     private RecyclerView recIngred, recStep;
     private Button btnFinish;
+    private DAORecipe daoRecipe; //Data Access Object
+    private String key=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-        title = "Milky chicken";
+        RecipeContent content = new RecipeContent();
+        daoRecipe = new DAORecipe();
+
+        ingredients = content.getIngredients();
+        steps = content.getSteps();
+
+        title = content.getTitle();
         tvRecipe = findViewById(R.id.tv_title_recipe);
         tvRecipe.setText(title);
+
         tvIntro = findViewById(R.id.tv_recipe_intro);
-        tvIntro.setText("I made this up!");
+        tvIntro.setText(content.getIntro());
+
         ivDemo = findViewById(R.id.iv_recipe_demo);
         ivDemo.setImageResource(R.drawable.milkchickendemo);
+
         tvIngred = findViewById(R.id.tv_title_ingredient);
         tvIngred.setText("Ingredients");
+
         tvStep = findViewById(R.id.tv_title_step);
         tvStep.setText("Steps");
+
         recIngred = findViewById(R.id.rec_ingredients);
         recStep = findViewById(R.id.rec_step);
         btnFinish = findViewById(R.id.btn_finish);
-        ingredients = new ArrayList<String>();
-        steps = new ArrayList<String>();
-        ingredients.add("milk");
-        ingredients.add("chicken");
-        ingredients.add("onion");
-        ingredients.add("mushroom");
 
         inventory = new ArrayList<Inventory>();
         inventory.add( new Inventory("milk","1"));
@@ -64,20 +72,6 @@ public class Recipe extends AppCompatActivity {
         images.put("image for step 2", R.drawable.chicken);
         images.put("image for step 10", R.drawable.milkchicken);
 
-
-
-        steps.add("1. Prepare all your ingredients.");
-        steps.add("2. Wash the chicken.");
-        steps.add("image for step 2");
-        steps.add("3. Pour half bottle of the milk in to a bowl and put the chicken in.");
-        steps.add("4. Marinate the chicken for 1 hour.");
-        steps.add("5. Boil water in a pot.");
-        steps.add("6. Put in the marinate chicken.");
-        steps.add("7. Put in the mushrooms.");
-        steps.add("8. Pour the rest of the milk into the pot.");
-        steps.add("9. Let it cook for 30 minutes.");
-        steps.add("10. Pour the chicken with the soup into a bowl and enjoy it!");
-        steps.add("image for step 10");
 
 
         recIngred.setLayoutManager(new LinearLayoutManager(Recipe.this));
@@ -93,6 +87,8 @@ public class Recipe extends AppCompatActivity {
         adaptorStep.setImages(images);
         recStep.setAdapter(adaptorStep);
 
+
+
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,9 +96,17 @@ public class Recipe extends AppCompatActivity {
                 dialog.setYesListener(new FinishDialog.IOnYesListener() {
                     @Override
                     public void onYes(FinishDialog dialog) {
-                        Toast.makeText(Recipe.this,"Ingredients removed!",Toast.LENGTH_LONG).show();
-                        //Intent intent = new Intent(Recipe.this, NotificationsFragment.class);
-                        //startActivity(intent);
+                        Toast.makeText(Recipe.this,"Ingredients removed!",Toast.LENGTH_SHORT).show();
+//                        assert etName != null;
+//                        assert etDay != null;
+//                        daoRecipe.add(content)
+//                                .addOnSuccessListener(success -> {
+//                                    Toast.makeText(Recipe.this,"Add ingredient successfully",Toast.LENGTH_SHORT).show();
+//                                }).addOnFailureListener(err->{
+//                            Toast.makeText(Recipe.this,err.getMessage(),Toast.LENGTH_SHORT).show();
+//                        });
+//                        Intent intent = new Intent(Recipe.this, NotificationsFragment.class);
+//                        startActivity(intent);
                     }
                 });
                 dialog.setNoListener(new FinishDialog.IOnNoListener() {
