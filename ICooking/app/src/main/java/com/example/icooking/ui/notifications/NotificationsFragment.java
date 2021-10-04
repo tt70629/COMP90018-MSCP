@@ -1,9 +1,11 @@
 package com.example.icooking.ui.notifications;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,6 +37,16 @@ public class NotificationsFragment extends Fragment {
                 textView.setText(s);
             }
         });
+
+        final Button button = binding.btnToRecipe;
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), com.example.icooking.ui.Recipe.Recipe.class);
+                startActivity(intent);
+            }
+        });
+
         return root;
     }
 

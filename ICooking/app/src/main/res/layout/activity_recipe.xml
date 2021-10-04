@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_title_recipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="30sp"
+            android:gravity="center_horizontal"/>
+
+        <TextView
+            android:id="@+id/tv_recipe_intro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="15sp"
+            android:layout_below="@id/tv_title_recipe"/>
+
+        <ImageView
+            android:id="@+id/iv_recipe_demo"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/tv_recipe_intro"/>
+
+        <TextView
+            android:id="@+id/tv_title_ingredient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"
+            android:layout_below="@id/iv_recipe_demo"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rec_ingredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/tv_title_ingredient"/>
+
+        <TextView
+            android:id="@+id/tv_title_step"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:layout_below="@id/rec_ingredients"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rec_step"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/tv_title_step"/>
+
+        <Button
+            android:id="@+id/btn_finish"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:textAllCaps="false"
+            android:text="Finish"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/rec_step"/>
+    </RelativeLayout>
+</ScrollView>
