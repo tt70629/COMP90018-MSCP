@@ -11,6 +11,11 @@ import androidx.annotation.NonNull;
 
 import com.example.icooking.R;
 
+/**
+ * @FinishDialog is used to call the dialog of asking user
+ * whether they would like to remove ingredients from their inventory
+ * after they click Finish button.
+ */
 public class FinishDialog extends Dialog implements View.OnClickListener{
     private TextView tvTitle, tvMessage;
     private Button btnYes, btnNo;
@@ -46,6 +51,10 @@ public class FinishDialog extends Dialog implements View.OnClickListener{
         btnNo.setOnClickListener(this);
     }
 
+    /**
+     * Separate Yes and No button to make them do different thing.
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         switch (view.getId()){

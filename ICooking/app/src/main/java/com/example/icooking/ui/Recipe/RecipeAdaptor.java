@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.icooking.Inventory;
 import com.example.icooking.R;
 
@@ -20,18 +21,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/**
+ * The class is called mainly by Steps RecyclerView.
+ */
 public class RecipeAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private ArrayList<String> list = new ArrayList<String>();
-    private ArrayList<String> inventory = new ArrayList<String>();
-    private HashMap<String, Integer> images;
-    private Boolean isStepsList;
+    private HashMap<String, String> images;
 
-    public RecipeAdaptor(Context context, Boolean isStepsList){
+
+    public RecipeAdaptor(Context context){
         this.context = context;
-        this.isStepsList = isStepsList;
     }
+
     @NonNull
     @NotNull
     @Override
@@ -39,32 +41,25 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (viewType == 0){
             return new LinearViewHolderText(LayoutInflater.from(context).inflate(R.layout.recipe_text,parent,false));
         }
-        return new LinearViewHolderImage(LayoutInflater.from(context).inflate(R.layout.recipe_image,parent,false));
+        else {
+            return new LinearViewHolderImage(LayoutInflater.from(context).inflate(R.layout.recipe_image,parent,false));
+        }
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull RecyclerView.ViewHolder holder, int position) {
-        if (isStepsList){
-            if (getItemViewType(position) == 0){
-                ((LinearViewHolderText)holder).textView.setText(list.get(position));
-            } else {
-                ((LinearViewHolderImage)holder).imageView.setImageResource(images.get(list.get(position)));
-            }
-        }
-        else {
-            if (!inventory.contains(list.get(position))){
-                ((LinearViewHolderText)holder).textView.setText(list.get(position));
-                ((LinearViewHolderText)holder).textView.setBackgroundColor(Color.parseColor("#32a852"));
-            } else {
-                ((LinearViewHolderText)holder).textView.setText(list.get(position));
-            }
+        if (getItemViewType(position) == 0){
+            ((LinearViewHolderText)holder).textView.setText(list.get(position));
+        } else {
+            Glide.with(context).load(images.get(list.get(position))).into(((LinearViewHolderImage) holder).imageView);
         }
     }
 
 
     @Override
     public int getItemViewType(int position) {
-        if (!isStepsList || !images.containsKey(list.get(position))) {
+        if (!images.containsKey(list.get(position))) {
             return 0;
         }
         return 1;
@@ -77,26 +72,19 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public void setList(ArrayList<String> list){
         this.list = list;
+        notifyDataSetChanged();
     }
 
-    public void setInventory(ArrayList<Inventory> inventory){
-        ArrayList<String> inventories = new ArrayList<String>();
-        for (Inventory i : inventory){
-            inventories.add(i.getIngredientName());
-        }
-        this.inventory = inventories;
-    }
-
-    public void setImages(HashMap<String, Integer> images){
+    public void setImages(HashMap<String, String> images){
         this.images = images;
+        notifyDataSetChanged();
     }
+
     public class LinearViewHolderText extends RecyclerView.ViewHolder{
         private TextView textView;
-        //private ImageView imageView;
         public LinearViewHolderText(@NonNull @NotNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.tv_recipe_text);
-            //imageView = itemView.findViewById(R.id.iv_recipe_image);
         }
     }
 
@@ -107,5 +95,4 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             imageView = itemView.findViewById(R.id.iv_recipe_image);
         }
     }
-
 }

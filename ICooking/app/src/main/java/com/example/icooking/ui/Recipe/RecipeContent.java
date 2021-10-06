@@ -10,36 +10,22 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class records the information of a Recipe, it's also the class
+ * that is saved in database.
+ */
 public class RecipeContent implements Serializable {
     private String title;
     private String intro;
     private ArrayList<String> ingredients;
     private ArrayList<String> steps;
     private String key;
-    //private HashMap<String, Integer> stepImages;
+    private HashMap<String, String> images;
 
     public RecipeContent() {
-        title = "Milky chicken";
-        intro = "I made this up!";
         ingredients = new ArrayList<String>();
         steps = new ArrayList<String>();
-        ingredients.add("milk");
-        ingredients.add("chicken");
-        ingredients.add("onion");
-        ingredients.add("mushroom");
-
-        steps.add("1. Prepare all your ingredients.");
-        steps.add("2. Wash the chicken.");
-        steps.add("image for step 2");
-        steps.add("3. Pour half bottle of the milk in to a bowl and put the chicken in.");
-        steps.add("4. Marinate the chicken for 1 hour.");
-        steps.add("5. Boil water in a pot.");
-        steps.add("6. Put in the marinate chicken.");
-        steps.add("7. Put in the mushrooms.");
-        steps.add("8. Pour the rest of the milk into the pot.");
-        steps.add("9. Let it cook for 30 minutes.");
-        steps.add("10. Pour the chicken with the soup into a bowl and enjoy it!");
-        steps.add("image for step 10");
+        images = new HashMap<String,String>();
     }
 
     public String getTitle() {
@@ -58,9 +44,9 @@ public class RecipeContent implements Serializable {
         return steps;
     }
 
-//    public HashMap<String, Integer> getStepImages() {
-//        return stepImages;
-//    }
+    public HashMap<String, String> getImages() {
+        return images;
+    }
 
     public void setTitle(String title) {
         this.title = title;
@@ -84,7 +70,7 @@ public class RecipeContent implements Serializable {
     public String getKey() {
         return key;
     }
-//    public void setStepImages(HashMap<String, Integer> stepImages) {
-//        this.stepImages = stepImages;
-//    }
+    public void setImages(HashMap<String, String> images) {
+        this.images = images;
+    }
 }

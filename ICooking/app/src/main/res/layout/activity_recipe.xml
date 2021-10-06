@@ -47,6 +47,16 @@
             android:layout_marginTop="5dp"
             android:layout_below="@id/tv_title_ingredient"/>
 
+        <Button
+            android:id="@+id/btn_recipe_addToBuy"
+            android:layout_width="150dp"
+            android:layout_height="70dp"
+            android:textAllCaps="false"
+            android:text="Add to Buy"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/rec_ingredients"/>
+
         <TextView
             android:id="@+id/tv_title_step"
             android:layout_width="match_parent"
@@ -54,7 +64,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:textSize="20sp"
-            android:layout_below="@id/rec_ingredients"/>
+            android:layout_below="@id/btn_recipe_addToBuy"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rec_step"
