@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,19 +17,25 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.bumptech.glide.Glide;
 import com.example.icooking.R;
 import com.example.icooking.Inventory;
 import com.example.icooking.databinding.FragmentNotificationsBinding;
+import com.example.icooking.ui.Recipe.DAORecipe;
+import com.example.icooking.ui.Recipe.Recipe;
 import com.example.icooking.ui.Recipe.RecipeAdaptorIngredients;
+import com.example.icooking.ui.Recipe.RecipeContent;
 import com.example.icooking.ui.dashboard.DAOInventory;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NotificationsFragment extends Fragment {
 
@@ -36,14 +43,22 @@ public class NotificationsFragment extends Fragment {
     private NotificationsViewModel notificationsViewModel;
     private FragmentNotificationsBinding binding;
     private DAOInventory daoInventory;
+    private DAORecipe daoRecipe;
     private String key=null;
-    private DisplayInventoryAdaptor adaptor;
+    private DisplayInventoryAdaptor invAdaptor;
+    private SearchedRecipeAdaptor recAdaptor;
     private ArrayList<Inventory> inventory;
     private ArrayList<Inventory> selected_inv;
     private RecipeAdaptorIngredients adaptorIngred;
     private TextView cookbook_title;
+    private TextView matched_recipe_title;
     private static final String TAG = "Here is the tag:";
     private Context bcontext;
+
+    private HashMap<String, String> images;
+    private ImageView imageDemo;
+
+
 
     ArrayList<Inventory> selected_ingredients = new ArrayList<>();
 
@@ -67,28 +82,42 @@ public class NotificationsFragment extends Fragment {
         cookbook_title = binding.titleCookbook;
         cookbook_title.setText("Choose ingredient you from your inventory: ");
 
+        matched_recipe_title = binding.matchedRecipeTitle;
+        //matched_recipe_title.setText("");
+
+        //imageDemo = ;
+
+        images = new HashMap<String,String>();
         //Set options from inventory
         final RecyclerView currentInventory= binding.currentInventory;
-        adaptor= new DisplayInventoryAdaptor(getContext());
-        currentInventory.setAdapter(adaptor);
+        invAdaptor= new DisplayInventoryAdaptor();
+        currentInventory.setAdapter(invAdaptor);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         currentInventory.setLayoutManager(layoutManager);
         daoInventory = new DAOInventory();
         fetchInventoryData();
 
+        final RecyclerView searchedRecipe = binding.searchedRecipe;
+        recAdaptor = new SearchedRecipeAdaptor(getContext());
+        searchedRecipe.setAdapter(recAdaptor);
+        searchedRecipe.setLayoutManager(new LinearLayoutManager(getContext()));
+        daoRecipe = new DAORecipe();
 
 
-        final Button button = binding.btnFinish2;
+
+        final Button button = binding.btnSearch;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (adaptor.selected_ingredients.isEmpty()){
-                    //makeText(bcontext,"Please select at least one ingredient!",Toast.LENGTH_SHORT).show();
+                if (invAdaptor.selected_ingredients.isEmpty()){
+                    Toast.makeText(getContext(),"Please select at least one ingredient!",Toast.LENGTH_SHORT).show();
                 } else {
-                    selected_ingredients=adaptor.selected_ingredients;
+                    matched_recipe_title.setText("Here are some recommendations: ");
+                    selected_ingredients=invAdaptor.selected_ingredients;
                     for(int i=0;i<selected_ingredients.size();i++) {
                         System.out.println(selected_ingredients.get(i).getIngredientName());
                     }
+                    fetchRecipeData();
                 }
             }
         });
@@ -98,7 +127,7 @@ public class NotificationsFragment extends Fragment {
         button_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), com.example.icooking.ui.Recipe.Recipe.class);
+                Intent intent = new Intent(getActivity(), Recipe.class);
                 startActivity(intent);
             }
         });
@@ -118,10 +147,48 @@ public class NotificationsFragment extends Fragment {
                     inventory.setSelected(false);
                     inventoryList.add(inventory);
                 }
-                adaptor.setInventory(inventoryList);
-                //inventoryList.addAll(selected_ingredients);
-                adaptor.notifyDataSetChanged();
-                //adaptor.setmListener();
+                invAdaptor.setInventory(inventoryList);
+                invAdaptor.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    private void fetchRecipeData() {
+
+        daoRecipe.get(key).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<RecipeContent> recipeContentList = new ArrayList<>();
+                ArrayList<RecipeContent> matched_recipes = new ArrayList<>();
+                int matched_number = 0;
+                for (DataSnapshot data: snapshot.getChildren()){
+                    RecipeContent recipeContent = data.getValue(RecipeContent.class);
+                    recipeContent.setKey(data.getKey());
+                    recipeContentList.add(recipeContent);
+                    for(int i=0;i<selected_ingredients.size();i++){
+                        for(int j=0;j<recipeContent.getIngredients().size();j++){
+                            if(selected_ingredients.get(i).getIngredientName().equals(recipeContent.getIngredients().get(j))){
+                                matched_number += 1;
+                            }
+                        }
+                    }
+                    if (matched_number > 1){
+                        System.out.println("wow: "+matched_number);
+                    }
+                    //System.out.println(matched_number);
+                    if(recipeContentList.size() > 3){
+                        // counter +=1, recipecontentList = recipecontentList
+                        //recipeContentList.get(counter*3),(counter*3+1),(counter*3+2) (if < size);
+                        //if selected_ingredient changed, counter = 0;
+                    }
+                }
+                recAdaptor.setRecipeContent(recipeContentList);
+                recAdaptor.notifyDataSetChanged();
+                //System.out.println(recipeContentList.get(0).getTitle());
             }
 
             @Override

@@ -32,9 +32,9 @@ public class DisplayInventoryAdaptor extends RecyclerView.Adapter<DisplayInvento
 
 
 
-    public DisplayInventoryAdaptor(Context mcontext) {
+    public DisplayInventoryAdaptor() {
         //this.mOnItemClickListener=onItemClickHandler;
-        this.mcontext = mcontext;
+        //this.mcontext = mcontext;
        /* test_list[0] = 1;
         test_list[1] =4;
         test_list[2] =6;*/
@@ -68,7 +68,7 @@ public class DisplayInventoryAdaptor extends RecyclerView.Adapter<DisplayInvento
                     view.setBackgroundColor(Color.WHITE);
                     selected_ingredients.remove(inventoryList.get(position));
                 }
-                Toast.makeText(mcontext, selected_ingredients.size() + "is selected:" + inventoryList.get(position).isSelected(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mcontext, selected_ingredients.size() + "is selected:" + inventoryList.get(position).isSelected(), Toast.LENGTH_SHORT).show();
 
                 //mListener.onItemClick(position);
                 //Toast.makeText(mcontext,"here:" + inventoryList.get(0).getIngredientName(), Toast.LENGTH_SHORT).show();

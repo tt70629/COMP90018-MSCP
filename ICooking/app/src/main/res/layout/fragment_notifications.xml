@@ -28,31 +28,39 @@
 
 
         <TextView
-            android:id="@+id/tv_title_step2"
+            android:id="@+id/matched_recipe_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:textSize="20sp"
+
+            android:textSize="15sp"
             android:layout_below="@id/current_inventory"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searched_recipe"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_below="@id/matched_recipe_title"/>
 
 
         <Button
-            android:id="@+id/btn_finish2"
+            android:id="@+id/btn_search"
             android:layout_width="100dp"
             android:layout_height="70dp"
             android:textAllCaps="false"
-            android:text="Finish"
+            android:text="Search"
             android:layout_marginTop="5dp"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/tv_title_step2"/>
+            android:layout_below="@id/searched_recipe"/>
 
         <Button
             android:id="@+id/btn_toRecipe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Testing"
-            android:layout_below="@id/btn_finish2"
+            android:layout_below="@id/btn_search"
 
             />
     </RelativeLayout>
