@@ -51,6 +51,7 @@ public class Recipe extends AppCompatActivity {
     // Data Access Object
     private DAORecipe daoRecipe;
     private DAOInventory daoInventory;
+    private TestingDAOToBuy daoToBuy;
 
     // Adaptors
     private RecipeAdaptorIngredients adaptorIngred;
@@ -94,7 +95,7 @@ public class Recipe extends AppCompatActivity {
 
         // Create Adaptor for Ingredients
         recIngred.setLayoutManager(new LinearLayoutManager(Recipe.this));
-        adaptorIngred = new RecipeAdaptorIngredients();
+        adaptorIngred = new RecipeAdaptorIngredients(Recipe.this);
         recIngred.setAdapter(adaptorIngred);
         daoInventory = new DAOInventory();
         fetchInventoryData();
@@ -138,14 +139,15 @@ public class Recipe extends AppCompatActivity {
             }
         });
 
+        // Fetch the toBuy list data
+        daoToBuy = new TestingDAOToBuy();
+        fetchToBuyListData();
 
         // Button that add missing Ingredients to ToBuy list once click.
         btnAddToBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(Recipe.this, "Missing ingredients added to your ToBuy list!", Toast.LENGTH_SHORT).show();
                 adaptorIngred.addToBuy();
-                // Hide the Button to avoid click again accidentally.
                 btnAddToBuy.setVisibility(View.GONE);
             }
         });
@@ -162,10 +164,8 @@ public class Recipe extends AppCompatActivity {
                         Toast.makeText(Recipe.this,"Ingredients removed!",Toast.LENGTH_SHORT).show();
                         // Remove used Ingredients from Inventory in database
                         adaptorIngred.remove();
-                        // Refresh the page
-                        Intent refresh = getIntent();
+                        // Close current recipe
                         finish();
-                        startActivity(refresh);
 
 //              Ignore the following comment.
 //                        assert etName != null;
@@ -184,10 +184,8 @@ public class Recipe extends AppCompatActivity {
                     // If click No
                     @Override
                     public void onNo(FinishDialog dialog) {
-                        // Refresh the page
-                        Intent refresh = getIntent();
+                        // Close current recipe
                         finish();
-                        startActivity(refresh);
                     }
                 });
                 dialog.show();
@@ -209,6 +207,26 @@ public class Recipe extends AppCompatActivity {
                     inventoryList.add(inventory);
                 }
                 adaptorIngred.setInventory(inventoryList);
+                adaptorIngred.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+    }
+
+    private void fetchToBuyListData() {
+        daoToBuy.get().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<TestingToBuyItem> toBuy = new ArrayList<>();
+                for (DataSnapshot data: snapshot.getChildren()){
+                    TestingToBuyItem item = data.getValue(TestingToBuyItem.class);
+                    toBuy.add(item);
+                }
+                adaptorIngred.setToBuyList(toBuy);
                 adaptorIngred.notifyDataSetChanged();
             }
 

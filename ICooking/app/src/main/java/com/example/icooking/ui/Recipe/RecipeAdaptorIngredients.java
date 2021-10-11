@@ -1,5 +1,6 @@
 package com.example.icooking.ui.Recipe;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -20,18 +21,24 @@ import com.example.icooking.ui.dashboard.InventoryAdaptor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This adaptor is mainly called by the Ingredients RecyclerView, it also handles the functions of
  * Remove ingredients from Inventory, Add ingredients to ToBuy list.
  */
 public class RecipeAdaptorIngredients extends RecyclerView.Adapter<RecipeAdaptorIngredients.ViewHolder>{
+    private Context context;
     ArrayList<Inventory> inventoryList = new ArrayList<>();
     ArrayList<String> ingredients = new ArrayList<>();
+    ArrayList<TestingToBuyItem> toBuyList = new ArrayList<>();
     HashMap<String,String> toRemove = new HashMap<>();
     ArrayList<String> toBuy = new ArrayList<>();
-    public RecipeAdaptorIngredients() {
 
+
+    public RecipeAdaptorIngredients(Context context) {
+        this.context = context;
     }
 
     @NonNull
@@ -67,10 +74,37 @@ public class RecipeAdaptorIngredients extends RecyclerView.Adapter<RecipeAdaptor
 
     public void addToBuy (){
         TestingDAOToBuy daoToBuy = new TestingDAOToBuy();
-        for (String i : toBuy) {
-            TestingToBuyItem item = new TestingToBuyItem(i);
-            daoToBuy.add(item);
+        ArrayList<String> alreadyHave = new ArrayList<>();
+        ArrayList<String> confirmedToBuy = new ArrayList<>();
+        for (TestingToBuyItem i : toBuyList){
+            alreadyHave.add(i.getName());
         }
+
+        for (String i : toBuy) {
+            if (alreadyHave.contains(i)){
+                // Do nothing
+            }
+            else {
+                confirmedToBuy.add(i);
+            }
+        }
+
+        // Remove duplicate
+        Set<String> set = new HashSet<>(confirmedToBuy);
+        confirmedToBuy.clear();
+        confirmedToBuy.addAll(set);
+
+        // Add to ToBuy list
+        if (confirmedToBuy.size() != 0){
+            for (String i : confirmedToBuy) {
+                TestingToBuyItem item = new TestingToBuyItem(i);
+                daoToBuy.add(item);
+            }
+            Toast.makeText(context, "Missing ingredients added to your ToBuy list!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "You already have all the ingredients in your ToBuy list", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void remove (){
@@ -125,6 +159,11 @@ public class RecipeAdaptorIngredients extends RecyclerView.Adapter<RecipeAdaptor
 
     public void setIngredients(ArrayList<String> ingredients) {
         this.ingredients = ingredients;
+        notifyDataSetChanged();
+    }
+
+    public void setToBuyList(ArrayList<TestingToBuyItem> toBuyList){
+        this.toBuyList = toBuyList;
         notifyDataSetChanged();
     }
 }
