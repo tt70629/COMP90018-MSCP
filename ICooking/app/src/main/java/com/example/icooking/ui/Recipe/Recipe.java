@@ -237,7 +237,9 @@ public class Recipe extends AppCompatActivity {
 
     }
 
-
+    public void setKey(String key){
+        this.key = key;
+    }
 
 
 }
