@@ -202,16 +202,10 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
      * were used in interacting with pseudo data that is no longer in use.
      */
     @Override
-    public void addItem(Inventory inv) {
-      inventory.add(0, inv);
-      adaptor.setInventory(inventory);
+    public void show(Inventory inv) {
     }
 
-    @Override
-    public void removeItem(int position) {
-       inventory.remove(position);
-       adaptor.setInventory(inventory);
-    }
+
 
 
 }
