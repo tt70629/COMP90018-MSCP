@@ -10,6 +10,7 @@ public class Inventory implements Serializable {
     private String dayLeft;
     @Exclude
     private String key;
+    private boolean selected;
 
 
 
@@ -44,6 +45,13 @@ public class Inventory implements Serializable {
     }
     public String getKey() {
         return key;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+    public void setSelected(boolean selected){
+        this.selected = selected;
     }
 }
 
