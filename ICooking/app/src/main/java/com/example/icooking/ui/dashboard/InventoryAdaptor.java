@@ -78,6 +78,17 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
     public Inventory getInventory(int position){
         return inventoryList.get(position);
     }
+    public boolean doesInventoryNameExist(String name){
+        boolean exist=false;
+        for (int i=0;i<inventoryList.size();i++){
+            Inventory inv=inventoryList.get(i);
+            //also remove all whitespaces 
+            if (name.toLowerCase().replaceAll("\\s+","").equals(inv.getIngredientName())){
+                exist=true;
+            }
+        }
+        return exist;
+    }
     public void setInventory(ArrayList<Inventory> inventoryList){
         this.inventoryList=inventoryList;
         notifyDataSetChanged();
