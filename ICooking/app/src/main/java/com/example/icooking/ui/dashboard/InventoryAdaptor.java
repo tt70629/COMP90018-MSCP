@@ -30,7 +30,7 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.inventory_list_item,parent,false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, mOnItemClickListener);
     }
 
     @Override
@@ -49,11 +49,13 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
     public class ViewHolder extends RecyclerView.ViewHolder  {
         private TextView ingredientName;
         private TextView leftDay;
+        private OnItemClickHandler mOnItemClickHandler;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnItemClickHandler mOnItemClickListener) {
             super(itemView);
             ingredientName=itemView.findViewById(R.id.ingredientName);
             leftDay=itemView.findViewById(R.id.leftDay);
+            this.mOnItemClickHandler=mOnItemClickListener;
 
         }
 
@@ -63,8 +65,8 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
      * Not in used for now.
      */
     interface OnItemClickHandler {
-        void addItem(Inventory inventory);
-        void removeItem(int position);
+        void show (Inventory inventory);
+
     }
     /*
      * These getters and setter are for activities or fragments to
@@ -75,6 +77,17 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
     }
     public Inventory getInventory(int position){
         return inventoryList.get(position);
+    }
+    public boolean doesInventoryNameExist(String name){
+        boolean exist=false;
+        for (int i=0;i<inventoryList.size();i++){
+            Inventory inv=inventoryList.get(i);
+            //also remove all whitespaces 
+            if (name.toLowerCase().replaceAll("\\s+","").equals(inv.getIngredientName())){
+                exist=true;
+            }
+        }
+        return exist;
     }
     public void setInventory(ArrayList<Inventory> inventoryList){
         this.inventoryList=inventoryList;

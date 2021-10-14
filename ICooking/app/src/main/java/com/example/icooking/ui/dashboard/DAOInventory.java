@@ -17,6 +17,9 @@ public class DAOInventory
         FirebaseDatabase db =FirebaseDatabase.getInstance(db_URL);
         databaseReference = db.getReference(Inventory.class.getSimpleName());
     }
+    /* This method will push all attributes which have getter method, therefore make sure you create
+     * getter method for any new added attribute!
+    */
     public Task<Void> add(Inventory inv)
     {
         return databaseReference.push().setValue(inv);

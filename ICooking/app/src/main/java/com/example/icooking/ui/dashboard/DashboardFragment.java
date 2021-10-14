@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,7 +80,8 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
                 bottomSheetDialog.setCanceledOnTouchOutside(false);
                 bottomSheetDialog.setDismissWithAnimation(true);
                 EditText etName= bottomSheetDialog.findViewById(R.id.et_ingredientName);
-                EditText etDay= bottomSheetDialog.findViewById(R.id.et_leftDay);
+                DatePicker datePicker= bottomSheetDialog.findViewById(R.id.expiryDate);
+                //EditText etDay= bottomSheetDialog.findViewById(R.id.et_leftDay);
                 Button btnSubmit= bottomSheetDialog.findViewById(R.id.btn_submit);
                 assert btnSubmit != null;
                 btnSubmit.setOnClickListener(new View.OnClickListener() {
@@ -87,14 +89,21 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
                     public void onClick(View view) {
                         //addItem(new Inventory(etName.getText().toString(),etDay.getText().toString()));
                         assert etName != null;
-                        assert etDay != null;
-                        daoInventory.add( new Inventory(etName.getText().toString(),etDay.getText().toString()) )
+                        //assert etDay != null;
+                        if(!validateIngredientName(etName)){
+                            return;
+                        };
+                        if (!adaptor.doesInventoryNameExist(etName.getText().toString())){
+                        daoInventory.add( new Inventory(etName.getText().toString(),getDateString(datePicker)) )
                                 .addOnSuccessListener(success -> {
                                     Toast.makeText(getContext(),"Add ingredient successfully",Toast.LENGTH_SHORT).show();
                                     bottomSheetDialog.dismiss();
                                 }).addOnFailureListener(err->{
                             Toast.makeText(getContext(),err.getMessage(),Toast.LENGTH_SHORT).show();
-                        });
+                        });}
+                        else{
+                        Toast.makeText(getContext(),"Bro, the ingredient has already listed in your inventory",Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 bottomSheetDialog.show();
@@ -202,16 +211,25 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
      * were used in interacting with pseudo data that is no longer in use.
      */
     @Override
-    public void addItem(Inventory inv) {
-      inventory.add(0, inv);
-      adaptor.setInventory(inventory);
+    public void show(Inventory inv) {
+    }
+    public boolean validateIngredientName( EditText name){
+        String val= name.getText().toString();
+        if(val.isEmpty()){
+            name.setError("This field should not be empty");
+            return false;
+        }
+        return true;
+    }
+    public String getDateString(DatePicker datepicker){
+        int year=datepicker.getYear();
+        //remember to add one in month, weird default setting.
+        int month=datepicker.getMonth()+1;
+        int day=datepicker.getDayOfMonth();
+        String date=year+"-"+(month<10?"0"+month:month)+"-"+(day<10?"0"+day:day);
+        return date;
     }
 
-    @Override
-    public void removeItem(int position) {
-       inventory.remove(position);
-       adaptor.setInventory(inventory);
-    }
 
 
 }
