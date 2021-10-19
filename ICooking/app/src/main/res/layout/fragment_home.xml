@@ -42,8 +42,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/buy_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="110dp"
+        android:background="#ffddcc"
         android:clipToPadding="false"
         android:paddingBottom="0dp"
         android:paddingTop="0dp"/>
