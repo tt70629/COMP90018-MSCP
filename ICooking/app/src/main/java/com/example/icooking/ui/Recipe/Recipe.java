@@ -17,6 +17,8 @@ import com.bumptech.glide.Glide;
 import com.example.icooking.Inventory;
 import com.example.icooking.R;
 import com.example.icooking.ui.dashboard.DAOInventory;
+import com.example.icooking.ui.home.Buylist;
+import com.example.icooking.ui.home.DAObuylist;
 import com.example.icooking.ui.home.HomeFragment;
 import com.google.firebase.FirebaseApiNotAvailableException;
 import com.google.firebase.database.DataSnapshot;
@@ -51,7 +53,7 @@ public class Recipe extends AppCompatActivity {
     // Data Access Object
     private DAORecipe daoRecipe;
     private DAOInventory daoInventory;
-    private TestingDAOToBuy daoToBuy;
+    private DAObuylist daoToBuy;
 
     // Adaptors
     private RecipeAdaptorIngredients adaptorIngred;
@@ -140,7 +142,7 @@ public class Recipe extends AppCompatActivity {
         });
 
         // Fetch the toBuy list data
-        daoToBuy = new TestingDAOToBuy();
+        daoToBuy = new DAObuylist();
         fetchToBuyListData();
 
         // Button that add missing Ingredients to ToBuy list once click.
@@ -221,9 +223,9 @@ public class Recipe extends AppCompatActivity {
         daoToBuy.get().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<TestingToBuyItem> toBuy = new ArrayList<>();
+                ArrayList<Buylist> toBuy = new ArrayList<>();
                 for (DataSnapshot data: snapshot.getChildren()){
-                    TestingToBuyItem item = data.getValue(TestingToBuyItem.class);
+                    Buylist item = data.getValue(Buylist.class);
                     toBuy.add(item);
                 }
                 adaptorIngred.setToBuyList(toBuy);
