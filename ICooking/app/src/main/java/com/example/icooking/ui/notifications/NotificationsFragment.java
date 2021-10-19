@@ -150,7 +150,7 @@ public class NotificationsFragment extends Fragment {
                 float x=ary[0];
                 float y=ary[1];
                 float z=ary[2];
-                float f=12;
+                float f=10;
                 long temp_current_time = System.currentTimeMillis();
                 if(Math.abs(x)>f||Math.abs(y)>f||Math.abs(z)>f){
                     //System.out.println("!!!");
@@ -168,7 +168,12 @@ public class NotificationsFragment extends Fragment {
                 if (search_counter > 2){
                     ready_to_search = true;
                     System.out.println("This is ready!!!!!" + ready_to_search);
-                    //fetchRecipeData();
+                    if (invAdaptor.selected_ingredients.isEmpty()){
+                        Toast.makeText(getContext(),"Please select at least one ingredient!",Toast.LENGTH_SHORT).show();
+                    } else {
+                        selected_ingredients = invAdaptor.selected_ingredients;
+                    }
+                    fetchRecipeData();
                     ready_to_search = false;
                     search_counter = 0;
 
