@@ -18,6 +18,8 @@ import com.example.icooking.R;
 import com.example.icooking.helper.ItemTouchHelperAdaptor;
 import com.example.icooking.ui.dashboard.DAOInventory;
 import com.example.icooking.ui.dashboard.InventoryAdaptor;
+import com.example.icooking.ui.home.Buylist;
+import com.example.icooking.ui.home.DAObuylist;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +34,7 @@ public class RecipeAdaptorIngredients extends RecyclerView.Adapter<RecipeAdaptor
     private Context context;
     ArrayList<Inventory> inventoryList = new ArrayList<>();
     ArrayList<String> ingredients = new ArrayList<>();
-    ArrayList<TestingToBuyItem> toBuyList = new ArrayList<>();
+    ArrayList<Buylist> toBuyList = new ArrayList<>();
     HashMap<String,String> toRemove = new HashMap<>();
     ArrayList<String> toBuy = new ArrayList<>();
 
@@ -73,11 +75,11 @@ public class RecipeAdaptorIngredients extends RecyclerView.Adapter<RecipeAdaptor
     }
 
     public void addToBuy (){
-        TestingDAOToBuy daoToBuy = new TestingDAOToBuy();
+        DAObuylist daoToBuy = new DAObuylist();
         ArrayList<String> alreadyHave = new ArrayList<>();
         ArrayList<String> confirmedToBuy = new ArrayList<>();
-        for (TestingToBuyItem i : toBuyList){
-            alreadyHave.add(i.getName());
+        for (Buylist i : toBuyList){
+            alreadyHave.add(i.getBuyName());
         }
 
         for (String i : toBuy) {
@@ -97,7 +99,7 @@ public class RecipeAdaptorIngredients extends RecyclerView.Adapter<RecipeAdaptor
         // Add to ToBuy list
         if (confirmedToBuy.size() != 0){
             for (String i : confirmedToBuy) {
-                TestingToBuyItem item = new TestingToBuyItem(i);
+                Buylist item = new Buylist(i);
                 daoToBuy.add(item);
             }
             Toast.makeText(context, "Missing ingredients added to your ToBuy list!", Toast.LENGTH_SHORT).show();
@@ -162,7 +164,7 @@ public class RecipeAdaptorIngredients extends RecyclerView.Adapter<RecipeAdaptor
         notifyDataSetChanged();
     }
 
-    public void setToBuyList(ArrayList<TestingToBuyItem> toBuyList){
+    public void setToBuyList(ArrayList<Buylist> toBuyList){
         this.toBuyList = toBuyList;
         notifyDataSetChanged();
     }

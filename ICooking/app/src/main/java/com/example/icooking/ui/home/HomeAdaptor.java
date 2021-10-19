@@ -1,14 +1,10 @@
 package com.example.icooking.ui.home;
 
-import android.content.Context;
-import android.view.ContentInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,9 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.icooking.Inventory;
 import com.example.icooking.R;
-import com.example.icooking.ui.Recipe.TestingDAOToBuy;
-import com.example.icooking.ui.Recipe.TestingToBuyItem;
-import com.example.icooking.ui.dashboard.InventoryAdaptor;
 
 import org.jetbrains.annotations.NotNull;
 
