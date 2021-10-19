@@ -47,22 +47,15 @@
 
         <Button
             android:id="@+id/btn_search"
-            android:layout_width="100dp"
-            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textAllCaps="false"
-            android:text="Search"
+            android:text="Click/Shake to get recipes"
             android:layout_marginTop="5dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/searched_recipe"/>
 
-        <Button
-            android:id="@+id/btn_toRecipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Testing"
-            android:layout_below="@id/btn_search"
-
-            />
+       
     </RelativeLayout>
 
 

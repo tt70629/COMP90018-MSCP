@@ -3,7 +3,13 @@ package com.example.icooking.ui.notifications;
 import android.content.Intent;
 import android.content.Context;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,6 +44,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static android.content.Context.SENSOR_SERVICE;
+import static android.content.Context.VIBRATOR_SERVICE;
+import static java.lang.System.currentTimeMillis;
+
 public class NotificationsFragment extends Fragment {
 
 
@@ -47,7 +58,7 @@ public class NotificationsFragment extends Fragment {
     private String key=null;
     private DisplayInventoryAdaptor invAdaptor;
     private SearchedRecipeAdaptor recAdaptor;
-    private ArrayList<Inventory> inventory;
+    private ArrayList<Inventory> inventory = new ArrayList<>();
     private ArrayList<Inventory> selected_inv;
     private RecipeAdaptorIngredients adaptorIngred;
     private TextView cookbook_title;
@@ -58,10 +69,20 @@ public class NotificationsFragment extends Fragment {
     private HashMap<String, String> images;
     private ImageView imageDemo;
 
+    private SensorManager manager;
+    private Vibrator vibrator;
+    private SensorEventListener listener;
+    private Sensor sensors;
+    private int sensor_rate;
+    private boolean ready_to_search = false;
+    private int search_counter = 0;
+    private long last_time = 0;
+    //private long current_time = 0;
 
 
     ArrayList<Inventory> selected_ingredients = new ArrayList<>();
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         notificationsViewModel =
@@ -84,8 +105,6 @@ public class NotificationsFragment extends Fragment {
 
         matched_recipe_title = binding.matchedRecipeTitle;
         //matched_recipe_title.setText("");
-
-        //imageDemo = ;
 
         images = new HashMap<String,String>();
         //Set options from inventory
@@ -112,7 +131,6 @@ public class NotificationsFragment extends Fragment {
                 if (invAdaptor.selected_ingredients.isEmpty()){
                     Toast.makeText(getContext(),"Please select at least one ingredient!",Toast.LENGTH_SHORT).show();
                 } else {
-                    matched_recipe_title.setText("Here are some recommendations: ");
                     selected_ingredients=invAdaptor.selected_ingredients;
                     for(int i=0;i<selected_ingredients.size();i++) {
                         System.out.println(selected_ingredients.get(i).getIngredientName());
@@ -122,17 +140,54 @@ public class NotificationsFragment extends Fragment {
             }
         });
 
+        manager=(SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
+        vibrator=(Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
+        sensors=manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensor_rate=SensorManager.SENSOR_DELAY_NORMAL;
+        listener=new SensorEventListener() {
+            public void onSensorChanged(SensorEvent event) {
+                float[] ary=event.values;
+                float x=ary[0];
+                float y=ary[1];
+                float z=ary[2];
+                float f=12;
+                long temp_current_time = System.currentTimeMillis();
+                if(Math.abs(x)>f||Math.abs(y)>f||Math.abs(z)>f){
+                    //System.out.println("!!!");
+                    //vibrator.vibrate(1000);
+                    if(temp_current_time > last_time + 1000){
+                        search_counter = 0;
+                    }
+                    if(temp_current_time > last_time + 300){
+                        last_time = temp_current_time;
+                        //System.out.println("This is current:" + current_time);
+                        System.out.println("This is temp:" + last_time);
+                        search_counter += 1;
+                    }
+                }
+                if (search_counter > 2){
+                    ready_to_search = true;
+                    System.out.println("This is ready!!!!!" + ready_to_search);
+                    //fetchRecipeData();
+                    ready_to_search = false;
+                    search_counter = 0;
 
-        final Button button_test = binding.btnToRecipe;
-        button_test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), Recipe.class);
-                startActivity(intent);
+                }
             }
-        });
+            public void onAccuracyChanged(Sensor arg0, int arg1) {
+
+            }
+        };
+
+        manager.registerListener(listener, sensors, sensor_rate);
+
 
         return root;
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        manager.unregisterListener(listener);
     }
 
     private void fetchInventoryData() {
@@ -168,7 +223,7 @@ public class NotificationsFragment extends Fragment {
                 for (DataSnapshot data: snapshot.getChildren()){
                     RecipeContent recipeContent = data.getValue(RecipeContent.class);
                     recipeContent.setKey(data.getKey());
-                    recipeContentList.add(recipeContent);
+                    //recipeContentList.add(recipeContent);
                     for(int i=0;i<selected_ingredients.size();i++){
                         for(int j=0;j<recipeContent.getIngredients().size();j++){
                             if(selected_ingredients.get(i).getIngredientName().equals(recipeContent.getIngredients().get(j))){
@@ -176,17 +231,30 @@ public class NotificationsFragment extends Fragment {
                             }
                         }
                     }
-                    if (matched_number > 1){
+                    if (recipeContent.getIngredients().size() - matched_number < 3){
                         System.out.println("wow: "+matched_number);
+                        recipeContentList.add(recipeContent);
                     }
-                    //System.out.println(matched_number);
-                    if(recipeContentList.size() > 3){
+
+                    /*if(recipeContentList.size() > 3){
                         // counter +=1, recipecontentList = recipecontentList
                         //recipeContentList.get(counter*3),(counter*3+1),(counter*3+2) (if < size);
                         //if selected_ingredient changed, counter = 0;
+                    }*/
+                }
+                if (recipeContentList.isEmpty()){
+                    recAdaptor.setRecipeContent(recipeContentList);
+                    matched_recipe_title.setText("Here are no more recommendations!");
+                } else{
+                    matched_recipe_title.setText("Here are some recommendations: ");
+                    if (recipeContentList.size() <= 3){
+                        recAdaptor.setRecipeContent(recipeContentList);
+                    }
+                    if (recipeContentList.size() > 3){
+
                     }
                 }
-                recAdaptor.setRecipeContent(recipeContentList);
+                //recAdaptor.setRecipeContent(recipeContentList);
                 recAdaptor.notifyDataSetChanged();
                 //System.out.println(recipeContentList.get(0).getTitle());
             }
