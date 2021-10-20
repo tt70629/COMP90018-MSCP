@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
                         //给一个假设日期先
                         String etName = buylist.get(i).getBuyName();
 
-                        daoInventory.add(new Inventory(etName,"0"))
+                        daoInventory.add(new Inventory(etName,"2021-12-15"))
                                 .addOnSuccessListener(success -> {
                                     Toast.makeText(getContext(), "Add ingredient successfully", Toast.LENGTH_SHORT).show();
 
