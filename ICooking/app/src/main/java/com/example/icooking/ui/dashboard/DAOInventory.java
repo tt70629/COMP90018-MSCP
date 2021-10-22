@@ -38,9 +38,9 @@ public class DAOInventory
     {
         if(key == null)
         {
-            return databaseReference.orderByKey().limitToFirst(8);
+            return databaseReference.orderByValue();
         }
-        return databaseReference.orderByKey().startAfter(key).limitToFirst(8);
+        return databaseReference.orderByValue().startAfter(key);
     }
 
     public Query get()
