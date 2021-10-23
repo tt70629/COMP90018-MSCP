@@ -4,21 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.v4.app.INotificationSideChannel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.icooking.Inventory;
 import com.example.icooking.R;
 
 //import org.jetbrains.annotations.NotNull;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class DisplayInventoryAdaptor extends RecyclerView.Adapter<DisplayInventoryAdaptor.ViewHolder> {
@@ -60,12 +55,14 @@ public class DisplayInventoryAdaptor extends RecyclerView.Adapter<DisplayInvento
             public void onClick(View view) {
                 if (!inventoryList.get(position).isSelected()) {
                     inventoryList.get(position).setSelected(true);
-                    view.setBackgroundColor(Color.GREEN);
+                    //view.setBackgroundColor(Color.GREEN);
+                    view.setBackgroundResource(R.drawable.selected_round);
                     selected_ingredients.add(inventoryList.get(position));
 
                 } else {
                     inventoryList.get(position).setSelected(false);
-                    view.setBackgroundColor(Color.WHITE);
+                    //view.setBackgroundColor(Color.WHITE);
+                    view.setBackgroundResource(R.drawable.round_edittext);
                     selected_ingredients.remove(inventoryList.get(position));
                 }
                 //Toast.makeText(mcontext, selected_ingredients.size() + "is selected:" + inventoryList.get(position).isSelected(), Toast.LENGTH_SHORT).show();

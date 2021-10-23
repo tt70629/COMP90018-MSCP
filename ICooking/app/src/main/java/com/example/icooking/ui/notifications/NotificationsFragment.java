@@ -122,6 +122,15 @@ public class NotificationsFragment extends Fragment {
         invAdaptor= new DisplayInventoryAdaptor();
         currentInventory.setAdapter(invAdaptor);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        HashMap<String, Integer> stringIntegerHashMap = new HashMap<>();
+        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.TOP_DECORATION,10);
+        
+        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.BOTTOM_DECORATION,10);
+
+        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.LEFT_DECORATION,20);
+
+        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.RIGHT_DECORATION,20);
+        currentInventory.addItemDecoration(new RecyclerViewSpacesItemDecoration(stringIntegerHashMap));
         currentInventory.setLayoutManager(layoutManager);
         daoInventory = new DAOInventory();
         fetchInventoryData();
