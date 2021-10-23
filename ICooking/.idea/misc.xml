@@ -20,9 +20,9 @@
         <entry key="app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/round_button.xml" value="0.23055555555555557" />
         <entry key="app/src/main/res/drawable/round_edittext.xml" value="0.23055555555555557" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.37395713866162833" />
-        <entry key="app/src/main/res/layout/activity_recipe.xml" value="0.11684782608695653" />
-        <entry key="app/src/main/res/layout/bottom_sheet_dialog_buy.xml" value="0.11684782608695653" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1953146818455895" />
+        <entry key="app/src/main/res/layout/activity_recipe.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/bottom_sheet_dialog_buy.xml" value="0.1" />
         <entry key="app/src/main/res/layout/botton_sheet_dialog.xml" value="0.26268115942028986" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.32842415251174356" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3457031448245705" />
@@ -30,7 +30,7 @@
         <entry key="app/src/main/res/layout/home_list_item.xml" value="0.18385416666666668" />
         <entry key="app/src/main/res/layout/inventory_display_text.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/inventory_list_item.xml" value="0.3916272788656313" />
-        <entry key="app/src/main/res/layout/matched_recipe.xml" value="0.15070921985815602" />
+        <entry key="app/src/main/res/layout/matched_recipe.xml" value="2.3415246087617176" />
         <entry key="app/src/main/res/layout/recipe_dialog.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/recipe_image.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/recipe_text.xml" value="0.15070921985815602" />

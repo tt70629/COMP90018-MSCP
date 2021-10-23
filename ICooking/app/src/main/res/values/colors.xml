@@ -9,5 +9,14 @@
     <color name="white">#FFFFFF</color>
     <color name="green">#9CFFF2</color>
     <color name="red">#DC281B</color>
+    <color name="pink">#FF959D</color>
+    <color name="pink_light">#FECED2</color>
+    <color name="theme_green">#247754</color>
+    <color name="theme_orange">#ed7b49</color>
+    <color name="grey">#f3f3f3</color>
+    <color name="yellow">#f7ce46</color>
+
+
+
 
 </resources>
