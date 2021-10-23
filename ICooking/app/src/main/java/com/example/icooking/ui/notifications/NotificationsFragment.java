@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +45,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import static android.content.Context.SENSOR_SERVICE;
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -65,6 +68,10 @@ public class NotificationsFragment extends Fragment {
     private TextView matched_recipe_title;
     private static final String TAG = "Here is the tag:";
     private Context bcontext;
+    private boolean selection_changed = false;
+    private boolean run_out_choice = false;
+    private boolean rough_search = false;
+    private boolean search_mode_changed = false;
 
     private HashMap<String, String> images;
     private ImageView imageDemo;
@@ -81,6 +88,9 @@ public class NotificationsFragment extends Fragment {
 
 
     ArrayList<Inventory> selected_ingredients = new ArrayList<>();
+    ArrayList<Inventory> last_selected = new ArrayList<>();
+    ArrayList<RecipeContent> local_recipe_content = new ArrayList<>();
+    ArrayList<RecipeContent> displayed_recipe_content = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -111,7 +121,7 @@ public class NotificationsFragment extends Fragment {
         final RecyclerView currentInventory= binding.currentInventory;
         invAdaptor= new DisplayInventoryAdaptor();
         currentInventory.setAdapter(invAdaptor);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         currentInventory.setLayoutManager(layoutManager);
         daoInventory = new DAOInventory();
         fetchInventoryData();
@@ -128,17 +138,20 @@ public class NotificationsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (invAdaptor.selected_ingredients.isEmpty()){
-                    Toast.makeText(getContext(),"Please select at least one ingredient!",Toast.LENGTH_SHORT).show();
-                } else {
-                    selected_ingredients=invAdaptor.selected_ingredients;
-                    for(int i=0;i<selected_ingredients.size();i++) {
-                        System.out.println(selected_ingredients.get(i).getIngredientName());
-                    }
-                    fetchRecipeData();
-                }
+                clickShake();
             }
         });
+
+        CheckBox ck_rough_search = binding.roughSearchCheckbox;
+        ck_rough_search.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                //System.out.println(b);
+                rough_search = b;
+                search_mode_changed = true;
+            }
+        });
+        ck_rough_search.setChecked(false);
 
         manager=(SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         vibrator=(Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
@@ -168,11 +181,11 @@ public class NotificationsFragment extends Fragment {
                 if (search_counter > 2){
                     ready_to_search = true;
                     System.out.println("This is ready!!!!!" + ready_to_search);
-                    if (invAdaptor.selected_ingredients.isEmpty()){
+                    /*if (invAdaptor.selected_ingredients.isEmpty()){
                         Toast.makeText(getContext(),"Please select at least one ingredient!",Toast.LENGTH_SHORT).show();
                     } else {
                         selected_ingredients = invAdaptor.selected_ingredients;
-                    }
+                    }*/
                     fetchRecipeData();
                     ready_to_search = false;
                     search_counter = 0;
@@ -193,6 +206,47 @@ public class NotificationsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         manager.unregisterListener(listener);
+    }
+
+    private void clickShake() {
+        if (invAdaptor.selected_ingredients.isEmpty()){
+            Toast.makeText(getContext(),"Please select at least one ingredient!",Toast.LENGTH_SHORT).show();
+        } else {
+            selected_ingredients=invAdaptor.selected_ingredients;
+            if(last_selected.isEmpty()){
+                selection_changed = true;
+                //System.out.println(selection_changed);
+                last_selected.addAll(selected_ingredients);
+            } else {
+                int counter = 0;
+                for(int i = 0;i<last_selected.size();i++){
+                    for(int j=0; j<selected_ingredients.size();j++){
+                        if (last_selected.get(i).getIngredientName().equals(selected_ingredients.get(j).getIngredientName())){
+                            counter += 1;
+                        } else {
+                            //last_selected = selected_ingredients;
+                        }
+                    }
+                }
+                if (counter >= last_selected.size() && counter >= selected_ingredients.size()){
+                    selection_changed = false;
+                } else {
+                    selection_changed = true;
+                    last_selected.clear();
+                    last_selected.addAll(selected_ingredients);
+                }
+                System.out.println(selection_changed);
+            }
+            if (run_out_choice) {
+                run_out_choice =false;
+                selection_changed = true;
+            }
+            if (search_mode_changed){
+                search_mode_changed = false;
+                selection_changed = true;
+            }
+            fetchRecipeData();
+        }
     }
 
     private void fetchInventoryData() {
@@ -225,29 +279,76 @@ public class NotificationsFragment extends Fragment {
                 ArrayList<RecipeContent> recipeContentList = new ArrayList<>();
                 ArrayList<RecipeContent> matched_recipes = new ArrayList<>();
                 int matched_number = 0;
-                for (DataSnapshot data: snapshot.getChildren()){
-                    RecipeContent recipeContent = data.getValue(RecipeContent.class);
-                    recipeContent.setKey(data.getKey());
-                    //recipeContentList.add(recipeContent);
-                    for(int i=0;i<selected_ingredients.size();i++){
-                        for(int j=0;j<recipeContent.getIngredients().size();j++){
-                            if(selected_ingredients.get(i).getIngredientName().equals(recipeContent.getIngredients().get(j))){
-                                matched_number += 1;
+                Random rd = new Random();
+                if(selection_changed) {
+                    for (DataSnapshot data : snapshot.getChildren()) {
+                        RecipeContent recipeContent = data.getValue(RecipeContent.class);
+                        recipeContent.setKey(data.getKey());
+                        //recipeContentList.add(recipeContent);
+                        for (int i = 0; i < selected_ingredients.size(); i++) {
+                            for (int j = 0; j < recipeContent.getIngredients().size(); j++) {
+                                if (selected_ingredients.get(i).getIngredientName().equals(recipeContent.getIngredients().get(j))) {
+                                    matched_number += 1;
+                                }
+
+                            }
+                        }
+                        if(rough_search) {
+                            if (recipeContent.getIngredients().size() - matched_number < 3) {
+                                System.out.println("wow: " + matched_number + "are matched");
+                                recipeContentList.add(recipeContent);
+                            }
+                        } else {
+                            if (recipeContent.getIngredients().size() - matched_number < 1) {
+                                System.out.println("wow: " + "perfect match");
+                                recipeContentList.add(recipeContent);
                             }
                         }
                     }
-                    if (recipeContent.getIngredients().size() - matched_number < 3){
-                        System.out.println("wow: "+matched_number);
-                        recipeContentList.add(recipeContent);
+                    if (!local_recipe_content.isEmpty()) {
+                        local_recipe_content.clear();
+                    }
+                    for(int i=0;i<8;i++) {
+                        local_recipe_content.addAll(recipeContentList);
+                    }
+                    //recAdaptor.setRecipeContent(local_recipe_content);
+                    if(local_recipe_content.size() <= 3) {
+                        recAdaptor.setRecipeContent(local_recipe_content);
+                        run_out_choice = true;
+                        Toast.makeText(getContext(),"There are no more recommendations for the ingredients!",Toast.LENGTH_SHORT).show();
+                    } else if(local_recipe_content.size() > 3){
+                        if(!displayed_recipe_content.isEmpty()){
+                            displayed_recipe_content.clear();
+                        }
+                        for(int i=0;i<3;i++) {
+                            int random_number = rd.nextInt(local_recipe_content.size());
+                            displayed_recipe_content.add(local_recipe_content.get(random_number));
+                            local_recipe_content.remove(local_recipe_content.get(random_number));
+                            System.out.println(random_number);
+                        }
+                        recAdaptor.setRecipeContent(displayed_recipe_content);
                     }
 
-                    /*if(recipeContentList.size() > 3){
-                        // counter +=1, recipecontentList = recipecontentList
-                        //recipeContentList.get(counter*3),(counter*3+1),(counter*3+2) (if < size);
-                        //if selected_ingredient changed, counter = 0;
-                    }*/
+                } else {
+                    if(local_recipe_content.size() <= 3) {
+                        recAdaptor.setRecipeContent(local_recipe_content);
+                        run_out_choice = true;
+                        Toast.makeText(getContext(),"There are no more recommendations for the ingredients!",Toast.LENGTH_SHORT).show();
+                    } else if(local_recipe_content.size() > 3){
+                        if(!displayed_recipe_content.isEmpty()){
+                            displayed_recipe_content.clear();
+                        }
+                        for(int i=0;i<3;i++) {
+                            int random_number = rd.nextInt(local_recipe_content.size());
+                            displayed_recipe_content.add(local_recipe_content.get(random_number));
+                            local_recipe_content.remove(local_recipe_content.get(random_number));
+                            System.out.println(random_number);
+                        }
+                        recAdaptor.setRecipeContent(displayed_recipe_content);
+                    }
+
                 }
-                if (recipeContentList.isEmpty()){
+                /*if (recipeContentList.isEmpty()){
                     recAdaptor.setRecipeContent(recipeContentList);
                     matched_recipe_title.setText("Here are no more recommendations!");
                 } else{
@@ -258,7 +359,7 @@ public class NotificationsFragment extends Fragment {
                     if (recipeContentList.size() > 3){
 
                     }
-                }
+                }*/
                 //recAdaptor.setRecipeContent(recipeContentList);
                 recAdaptor.notifyDataSetChanged();
                 //System.out.println(recipeContentList.get(0).getTitle());
