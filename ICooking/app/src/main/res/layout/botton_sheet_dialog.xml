@@ -25,14 +25,16 @@
         android:layout_width="wrap_content"
         android:text="Select the expiry date"
         android:textColor="@color/black"
-        android:textSize="18dp" />
+        android:textSize="18dp"
+        android:id="@+id/expiryDate_text"/>
     <DatePicker
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:calendarViewShown="false"
         android:datePickerMode="spinner"
         android:spinnersShown="true"
-        android:id="@+id/expiryDate"/>
+        android:id="@+id/expiryDate"
+        android:visibility="visible"/>
 
     <Button
         android:id="@+id/btn_submit"
