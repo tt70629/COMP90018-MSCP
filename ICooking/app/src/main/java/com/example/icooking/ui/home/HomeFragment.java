@@ -28,6 +28,7 @@ import com.example.icooking.databinding.FragmentDashboardBinding;
 import com.example.icooking.databinding.FragmentHomeBinding;
 import com.example.icooking.helper.RecyclerTouchListener;
 import com.example.icooking.ui.dashboard.DAOInventory;
+import com.example.icooking.ui.dashboard.DashboardFragment;
 import com.example.icooking.ui.dashboard.DashboardViewModel;
 import com.example.icooking.ui.dashboard.InventoryAdaptor;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -103,8 +104,8 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
                         keyArrayList.add(tmpkey);
                         //给一个假设日期先
                         String etName = buylist.get(i).getBuyName();
-
-                        daoInventory.add(new Inventory(etName,"2021-12-15"))
+                        // use static method from inventoryframent.
+                        daoInventory.add(new Inventory(etName, DashboardFragment.getDefaultDateString()))
                                 .addOnSuccessListener(success -> {
                                     Toast.makeText(getContext(), "Add ingredient successfully", Toast.LENGTH_SHORT).show();
 

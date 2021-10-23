@@ -96,13 +96,10 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
                 btnSubmit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //addItem(new Inventory(etName.getText().toString(),etDay.getText().toString()));
                         assert etName != null;
-                        //assert etDay != null;
                         if (!validateIngredientName(etName)) {
                             return;}
                         if (!adaptor.doesInventoryNameExist(etName.getText().toString())) {
-
                             daoInventory.add(new Inventory(etName.getText().toString(), getDefaultDateString()))
                                     .addOnSuccessListener(success -> {
                                         Toast.makeText(getContext(), "Add ingredient successfully", Toast.LENGTH_SHORT).show();
@@ -159,7 +156,7 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
                             String[] date_arr = expiry_date.split("-");
                             datePicker.updateDate(
                                     Integer.parseInt(date_arr[0]),
-                                    Integer.parseInt(date_arr[1]),
+                                    Integer.parseInt(date_arr[1])-1,
                                     Integer.parseInt(date_arr[2]));
                             //etDay.setText(editInventory.getDayLeft());
                             Button btnSubmit = bottomSheetDialog.findViewById(R.id.btn_submit);
@@ -209,7 +206,6 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
                 adaptor.setInventory(inventoryList);
                 adaptor.notifyDataSetChanged();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
@@ -249,14 +245,11 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
         return date;
     }
 
-    public String getDefaultDateString() {
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd[ HH:mm:ss]")
-                .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
-                .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
-                .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
-                .toFormatter();
+    public static String getDefaultDateString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime defaultExpiryDate = LocalDateTime.now().plusDays(DEFAULT_DURATION);
         String expiryDate = defaultExpiryDate.format(formatter);
+        System.out.println(expiryDate);
         return expiryDate;
     }
 
