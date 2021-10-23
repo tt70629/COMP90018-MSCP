@@ -12,27 +12,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
-            android:textSize="15sp"
-            />
-
-
+            android:textSize="15sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/current_inventory"
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
             android:layout_below="@id/title_cookbook"/>
-
-
 
         <TextView
             android:id="@+id/matched_recipe_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-
             android:textSize="15sp"
             android:layout_below="@id/current_inventory"/>
 
@@ -44,19 +37,28 @@
             android:layout_marginTop="0dp"
             android:layout_below="@id/matched_recipe_title"/>
 
-
         <Button
             android:id="@+id/btn_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
             android:text="Click/Shake to get recipes"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/searched_recipe"/>
 
-       
+        <CheckBox
+            android:id="@+id/rough_search_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_search"
+            android:layout_centerHorizontal="true"
+            android:text="rough search" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/rough_search_checkbox"/>
     </RelativeLayout>
-
-
 </ScrollView>
