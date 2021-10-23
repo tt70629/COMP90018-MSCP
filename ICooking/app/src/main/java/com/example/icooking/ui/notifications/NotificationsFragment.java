@@ -186,7 +186,7 @@ public class NotificationsFragment extends Fragment {
                     } else {
                         selected_ingredients = invAdaptor.selected_ingredients;
                     }*/
-                    fetchRecipeData();
+                    clickShake();
                     ready_to_search = false;
                     search_counter = 0;
 
