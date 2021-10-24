@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/lowerLayout"
         android:layout_width="wrap_content"
-        android:layout_height="70dp"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:gravity="right"
 
@@ -73,7 +73,7 @@
 <LinearLayout
     android:id="@+id/upperLayout"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="40dp"
     android:background="@android:color/white"
     android:clickable="true"
     android:elevation="4dp"
@@ -82,44 +82,35 @@
     android:layout_margin="10dp"
     android:visibility="visible">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:foreground="?attr/selectableItemBackground">
+        android:foreground="?attr/selectableItemBackground"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/ingredientName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            tools:text="name of ingredient "
             style="@style/TextAppearance.AppCompat.Headline"
-            app:layout_constraintBottom_toTopOf="@+id/leftDay"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="204dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            tools:text="name of ingredient " />
 
         <TextView
             android:id="@+id/leftDay"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            tools:text="left day"
-            android:lines="1"
-            android:layout_marginTop="5dp"
             style="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/ingredientName"
-            app:layout_constraintTop_toBottomOf="@+id/ingredientName" />
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:lines="1"
+            tools:text="left day" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </LinearLayout>
 </RelativeLayout>
