@@ -72,6 +72,8 @@ public class NotificationsFragment extends Fragment {
     private boolean run_out_choice = false;
     private boolean rough_search = false;
     private boolean search_mode_changed = false;
+    private boolean initial_rec = true;
+    
 
     private HashMap<String, String> images;
     private ImageView imageDemo;
@@ -141,6 +143,7 @@ public class NotificationsFragment extends Fragment {
         searchedRecipe.setLayoutManager(new LinearLayoutManager(getContext()));
         daoRecipe = new DAORecipe();
 
+        initialFetchRecipeData();
 
 
         final Button button = binding.btnSearch;
@@ -218,6 +221,7 @@ public class NotificationsFragment extends Fragment {
     }
 
     private void clickShake() {
+        initial_rec = false;
         if (invAdaptor.selected_ingredients.isEmpty()){
             Toast.makeText(getContext(),"Please select at least one ingredient!",Toast.LENGTH_SHORT).show();
         } else {
@@ -280,6 +284,29 @@ public class NotificationsFragment extends Fragment {
         });
     }
 
+    private void initialFetchRecipeData(){
+        daoRecipe.get(key).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<RecipeContent> recipeContentList = new ArrayList<>();
+                for (DataSnapshot data: snapshot.getChildren()){
+                    RecipeContent recipeContent = data.getValue(RecipeContent.class);
+                    recipeContent.setKey(data.getKey());
+                    for(int i=0;i<3;i++) {
+                        recipeContentList.add(recipeContent);
+                    }
+                }
+
+                recAdaptor.setRecipeContent(recipeContentList);
+                recAdaptor.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
     private void fetchRecipeData() {
 
         daoRecipe.get(key).addValueEventListener(new ValueEventListener() {
@@ -303,7 +330,8 @@ public class NotificationsFragment extends Fragment {
                             }
                         }
                         if(rough_search) {
-                            if (recipeContent.getIngredients().size() - matched_number < 3) {
+                            //if (recipeContent.getIngredients().size() - matched_number < 3) {
+                            if(matched_number > 0){
                                 System.out.println("wow: " + matched_number + "are matched");
                                 recipeContentList.add(recipeContent);
                             }
@@ -321,7 +349,10 @@ public class NotificationsFragment extends Fragment {
                         local_recipe_content.addAll(recipeContentList);
                     }
                     //recAdaptor.setRecipeContent(local_recipe_content);
-                    if(local_recipe_content.size() <= 3) {
+                    if(local_recipe_content.size() == 0){
+                        System.out.println("dont have any");
+                        
+                    } else if(local_recipe_content.size() > 0 && local_recipe_content.size() <= 3) {
                         recAdaptor.setRecipeContent(local_recipe_content);
                         run_out_choice = true;
                         Toast.makeText(getContext(),"There are no more recommendations for the ingredients!",Toast.LENGTH_SHORT).show();
@@ -339,7 +370,10 @@ public class NotificationsFragment extends Fragment {
                     }
 
                 } else {
-                    if(local_recipe_content.size() <= 3) {
+                    if(local_recipe_content.size() == 0){
+                        System.out.println("dont have any");
+
+                    } else if(local_recipe_content.size() > 0 && local_recipe_content.size() <= 3) {
                         recAdaptor.setRecipeContent(local_recipe_content);
                         run_out_choice = true;
                         Toast.makeText(getContext(),"There are no more recommendations for the ingredients!",Toast.LENGTH_SHORT).show();
