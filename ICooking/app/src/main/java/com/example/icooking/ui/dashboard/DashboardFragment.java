@@ -1,29 +1,31 @@
 package com.example.icooking.ui.dashboard;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.ItemTouchHelper;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.icooking.Inventory;
+import com.example.icooking.MainActivity;
 import com.example.icooking.R;
 import com.example.icooking.databinding.FragmentDashboardBinding;
-import com.example.icooking.helper.InventoryItemTouchHelperCallBack;
+
 import com.example.icooking.helper.RecyclerTouchListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -32,9 +34,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class DashboardFragment extends Fragment implements InventoryAdaptor.OnItemClickHandler {
@@ -46,7 +48,10 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
     private BottomSheetDialog bottomSheetDialog;
     private DAOInventory daoInventory; //Data Access Object
     private String key = null;
-    private final static long DEFAULT_DURATION = 10;
+    static final long DEFAULT_DURATION = 10;
+    static final int SORT_BY_DURATION=1;
+    static final int SORT_BY_KEY=0;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         /*
@@ -68,6 +73,9 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
         recviewInventory.setAdapter(adaptor);
         recviewInventory.setLayoutManager(new LinearLayoutManager(getContext()));
         daoInventory = new DAOInventory();
+        if(!MainActivity.isConnected(this.getContext())){
+
+        }
         fetchInventoryData();
 
 
@@ -197,17 +205,28 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
         daoInventory.get(key).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<Inventory> inventoryList = new ArrayList<>();
-                for (DataSnapshot data : snapshot.getChildren()) {
-                    Inventory inventory = data.getValue(Inventory.class);
-                    inventory.setKey(data.getKey());
-                    inventoryList.add(inventory);
+                try {
+                    ArrayList<Inventory> inventoryList = new ArrayList<>();
+                    final ProgressBar pgsBar=binding.progressBar;
+                    pgsBar.setVisibility(View.VISIBLE);
+                    for (DataSnapshot data : snapshot.getChildren()) {
+                        Inventory inventory = data.getValue(Inventory.class);
+                        inventory.setKey(data.getKey());
+                        inventoryList.add(inventory);
+                    }
+                    pgsBar.setVisibility(View.GONE);
+                    Collections.sort(inventoryList);
+                    adaptor.setInventory(inventoryList);
+                    adaptor.notifyDataSetChanged();
+                }catch(Exception e){
+                    Log.d("DS_STATUS",e.toString());
                 }
-                adaptor.setInventory(inventoryList);
-                adaptor.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                final ProgressBar pgsBar=binding.progressBar;
+                pgsBar.setVisibility(View.VISIBLE);
+                Toast.makeText(getContext(),"Permission denied",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -249,7 +268,6 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime defaultExpiryDate = LocalDateTime.now().plusDays(DEFAULT_DURATION);
         String expiryDate = defaultExpiryDate.format(formatter);
-        System.out.println(expiryDate);
         return expiryDate;
     }
 

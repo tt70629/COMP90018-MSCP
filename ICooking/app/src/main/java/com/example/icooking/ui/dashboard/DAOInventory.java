@@ -36,11 +36,12 @@ public class DAOInventory
 
     public Query get(String key)
     {
+
         if(key == null)
         {
-            return databaseReference.orderByValue();
+            return databaseReference;
         }
-        return databaseReference.orderByValue().startAfter(key);
+        return databaseReference.orderByChild("expiryDate");
     }
 
     public Query get()

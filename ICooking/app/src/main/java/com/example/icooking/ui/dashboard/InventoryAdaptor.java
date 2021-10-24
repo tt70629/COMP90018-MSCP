@@ -1,20 +1,25 @@
 package com.example.icooking.ui.dashboard;
 
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
+
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.icooking.Inventory;
 import com.example.icooking.R;
-import com.example.icooking.helper.ItemTouchHelperAdaptor;
 
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.ViewHolder>  {
@@ -36,7 +41,7 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
      holder.ingredientName.setText(inventoryList.get(position).getIngredientName());
-     holder.leftDay.setText(inventoryList.get(position).getDayLeft());
+     holder.leftDay.setText(getDayLeft(inventoryList.get(position).getExpiryDate()));
 
     }
 
@@ -92,5 +97,23 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
     public void setInventory(ArrayList<Inventory> inventoryList){
         this.inventoryList=inventoryList;
         notifyDataSetChanged();
+    }
+    public static String getDayLeft(String expiryDate) {
+        try {
+            DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd[ HH:mm:ss]")
+                    .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
+                    .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
+                    .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
+                    .toFormatter();
+            LocalDateTime _expiryDate = LocalDateTime.parse(expiryDate, formatter);
+            LocalDateTime todayDate = LocalDateTime.now();
+            long daysBetween = ChronoUnit.DAYS.between(todayDate,_expiryDate);
+            String daysBetween_str = Long.toString(daysBetween);
+
+            return daysBetween_str;
+        } catch (Exception e) {
+            return e.toString();
+        }
+
     }
 }
