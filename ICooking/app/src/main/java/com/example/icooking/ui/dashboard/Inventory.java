@@ -1,6 +1,5 @@
-package com.example.icooking;
+package com.example.icooking.ui.dashboard;
 
-import com.example.icooking.ui.dashboard.InventoryAdaptor;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;

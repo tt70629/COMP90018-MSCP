@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.icooking.Inventory;
+import com.example.icooking.ui.dashboard.Inventory;
 import com.example.icooking.R;
 
 //import org.jetbrains.annotations.NotNull;

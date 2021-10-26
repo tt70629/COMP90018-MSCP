@@ -1,8 +1,6 @@
 package com.example.icooking.ui.notifications;
 
-import android.content.Intent;
 import android.content.Context;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,21 +19,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.bumptech.glide.Glide;
-import com.example.icooking.R;
-import com.example.icooking.Inventory;
+import com.example.icooking.ui.dashboard.Inventory;
 import com.example.icooking.databinding.FragmentNotificationsBinding;
 import com.example.icooking.ui.Recipe.DAORecipe;
-import com.example.icooking.ui.Recipe.Recipe;
 import com.example.icooking.ui.Recipe.RecipeAdaptorIngredients;
 import com.example.icooking.ui.Recipe.RecipeContent;
 import com.example.icooking.ui.dashboard.DAOInventory;
@@ -49,7 +42,6 @@ import java.util.Random;
 
 import static android.content.Context.SENSOR_SERVICE;
 import static android.content.Context.VIBRATOR_SERVICE;
-import static java.lang.System.currentTimeMillis;
 
 public class NotificationsFragment extends Fragment {
 

@@ -19,7 +19,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.icooking.Inventory;
 import com.example.icooking.MainActivity;
 import com.example.icooking.R;
 import com.example.icooking.databinding.FragmentDashboardBinding;
@@ -43,7 +42,6 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
 
     private DashboardViewModel dashboardViewModel;
     private FragmentDashboardBinding binding;
-    private ArrayList<Inventory> inventory;
     private InventoryAdaptor adaptor;
     private BottomSheetDialog bottomSheetDialog;
     private DAOInventory daoInventory; //Data Access Object
@@ -73,9 +71,6 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
         recviewInventory.setAdapter(adaptor);
         recviewInventory.setLayoutManager(new LinearLayoutManager(getContext()));
         daoInventory = new DAOInventory();
-        if(!MainActivity.isConnected(this.getContext())){
-
-        }
         fetchInventoryData();
 
 
