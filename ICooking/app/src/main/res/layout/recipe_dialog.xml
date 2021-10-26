@@ -21,11 +21,9 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textColor="@color/black"
-        android:text="Would you like to remove the ingredients form Inventory?"
+        android:text="Would you like to remove the ingredients from Inventory?"
         android:layout_marginTop="1dp"
         android:gravity="center_horizontal"/>
-
-
 
     <LinearLayout
         android:layout_width="match_parent"

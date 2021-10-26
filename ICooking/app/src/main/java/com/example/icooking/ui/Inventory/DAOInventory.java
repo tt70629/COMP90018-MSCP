@@ -1,6 +1,5 @@
-package com.example.icooking.ui.dashboard;
+package com.example.icooking.ui.Inventory;
 
-import com.example.icooking.Inventory;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

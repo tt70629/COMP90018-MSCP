@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.icooking.Inventory;
+import com.example.icooking.ui.Inventory.Inventory;
 import com.example.icooking.R;
 
 import org.jetbrains.annotations.NotNull;

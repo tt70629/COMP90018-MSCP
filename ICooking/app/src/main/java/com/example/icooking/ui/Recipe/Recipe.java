@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,13 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.icooking.Inventory;
+import com.example.icooking.ui.Inventory.Inventory;
 import com.example.icooking.R;
-import com.example.icooking.ui.dashboard.DAOInventory;
+import com.example.icooking.ui.Inventory.DAOInventory;
 import com.example.icooking.ui.home.Buylist;
 import com.example.icooking.ui.home.DAObuylist;
-import com.example.icooking.ui.home.HomeFragment;
-import com.google.firebase.FirebaseApiNotAvailableException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -199,7 +195,7 @@ public class Recipe extends AppCompatActivity {
     }
 
     /**
-     * This method is used to fetch Inventory data form database.
+     * This method is used to fetch Inventory data from database.
      */
     private void fetchInventoryData() {
         daoInventory.get().addValueEventListener(new ValueEventListener() {

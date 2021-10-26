@@ -5,35 +5,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.net.Uri;
-import android.support.v4.app.INotificationSideChannel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.icooking.Inventory;
+import com.example.icooking.ui.Inventory.Inventory;
 import com.example.icooking.R;
 import com.example.icooking.ui.Recipe.Recipe;
-import com.example.icooking.ui.Recipe.RecipeAdaptor;
 import com.example.icooking.ui.Recipe.RecipeContent;
 
 //import org.jetbrains.annotations.NotNull;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 public class SearchedRecipeAdaptor extends RecyclerView.Adapter<SearchedRecipeAdaptor.ViewHolder>{
     ArrayList<Inventory> selected_ingredients = new ArrayList<>();
