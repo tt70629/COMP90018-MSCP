@@ -26,12 +26,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.example.icooking.ui.dashboard.Inventory;
+import com.example.icooking.ui.Inventory.Inventory;
 import com.example.icooking.databinding.FragmentNotificationsBinding;
 import com.example.icooking.ui.Recipe.DAORecipe;
 import com.example.icooking.ui.Recipe.RecipeAdaptorIngredients;
 import com.example.icooking.ui.Recipe.RecipeContent;
-import com.example.icooking.ui.dashboard.DAOInventory;
+import com.example.icooking.ui.Inventory.DAOInventory;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;

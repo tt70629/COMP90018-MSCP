@@ -1,4 +1,4 @@
-package com.example.icooking.ui.dashboard;
+package com.example.icooking.ui.Inventory;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +19,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.icooking.MainActivity;
 import com.example.icooking.R;
 import com.example.icooking.databinding.FragmentDashboardBinding;
 

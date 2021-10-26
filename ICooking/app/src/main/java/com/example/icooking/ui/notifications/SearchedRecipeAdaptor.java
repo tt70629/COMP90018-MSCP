@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.icooking.ui.dashboard.Inventory;
+import com.example.icooking.ui.Inventory.Inventory;
 import com.example.icooking.R;
 import com.example.icooking.ui.Recipe.Recipe;
 import com.example.icooking.ui.Recipe.RecipeContent;

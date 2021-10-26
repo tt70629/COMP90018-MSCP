@@ -1,4 +1,4 @@
-package com.example.icooking.ui.dashboard;
+package com.example.icooking.ui.Inventory;
 
 import com.google.firebase.database.Exclude;
 

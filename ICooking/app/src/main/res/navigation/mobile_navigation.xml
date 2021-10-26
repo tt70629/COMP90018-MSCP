@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_inventory"
-        android:name="com.example.icooking.ui.dashboard.DashboardFragment"
+        android:name="com.example.icooking.ui.Inventory.DashboardFragment"
         android:label="@string/title_Inventory"
         tools:layout="@layout/fragment_dashboard" />
 

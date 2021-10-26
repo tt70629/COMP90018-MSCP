@@ -13,9 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.icooking.ui.dashboard.Inventory;
+import com.example.icooking.ui.Inventory.Inventory;
 import com.example.icooking.R;
-import com.example.icooking.ui.dashboard.DAOInventory;
+import com.example.icooking.ui.Inventory.DAOInventory;
 import com.example.icooking.ui.home.Buylist;
 import com.example.icooking.ui.home.DAObuylist;
 import com.google.firebase.database.DataSnapshot;

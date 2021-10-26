@@ -14,12 +14,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.icooking.ui.dashboard.Inventory;
+import com.example.icooking.ui.Inventory.Inventory;
 import com.example.icooking.R;
 import com.example.icooking.databinding.FragmentHomeBinding;
 import com.example.icooking.helper.RecyclerTouchListener;
-import com.example.icooking.ui.dashboard.DAOInventory;
-import com.example.icooking.ui.dashboard.DashboardFragment;
+import com.example.icooking.ui.Inventory.DAOInventory;
+import com.example.icooking.ui.Inventory.DashboardFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

@@ -1,4 +1,4 @@
-package com.example.icooking.ui.dashboard;
+package com.example.icooking.ui.Inventory;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -26,6 +26,7 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
     ArrayList<Inventory> inventoryList = new ArrayList<>();
     OnItemClickHandler mOnItemClickListener;
     final String EXPIRED="EXPIRED";
+    static final int WARNING_DAYS=3;
 
 
     public InventoryAdaptor(OnItemClickHandler onItemClickHandler) {
@@ -44,7 +45,7 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
         String DayLeft = getDayLeft(inventoryList.get(position).getExpiryDate());
         holder.ingredientName.setText(inventoryList.get(position).getIngredientName());
         holder.leftDay.setText(DayLeft);
-        if(Integer.parseInt(DayLeft)<=3){
+        if(Integer.parseInt(DayLeft)<=WARNING_DAYS){
             holder.leftDay.setTextColor(Color.RED);
             if(Integer.parseInt(DayLeft)<=0){
                 holder.leftDay.setText(EXPIRED);
