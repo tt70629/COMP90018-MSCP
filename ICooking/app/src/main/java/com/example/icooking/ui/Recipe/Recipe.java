@@ -34,7 +34,7 @@ import java.util.Map;
 
 public class Recipe extends AppCompatActivity {
     private String title;
-    private String key="-MlFdsJ_7QBZl9YqEPpY";
+    private String key="-Mn-nOr_iglYjDe7aVXt";
 
     private ArrayList<String> ingredients;
     private ArrayList<String> steps;
@@ -59,6 +59,10 @@ public class Recipe extends AppCompatActivity {
     // Database access
     private DatabaseReference database;
     private final static String db_URL="https://icooking-db-default-rtdb.asia-southeast1.firebasedatabase.app/";
+
+    public void setKey(String key){
+        this.key = key;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,9 +242,7 @@ public class Recipe extends AppCompatActivity {
 
     }
 
-    public void setKey(String key){
-        this.key = key;
-    }
+
 
 
 }
