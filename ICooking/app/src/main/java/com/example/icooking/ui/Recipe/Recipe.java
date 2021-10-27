@@ -35,7 +35,7 @@ import java.util.Map;
 
 public class Recipe extends AppCompatActivity {
     private String title;
-    private String key="-Mn-nOr_iglYjDe7aVXt";
+    private String key="-Mn04X7ikmjcvp-GqdXW";
 
     private ArrayList<String> ingredients;
     private ArrayList<String> steps;
@@ -195,6 +195,46 @@ public class Recipe extends AppCompatActivity {
                     @Override
                     public void onNo(FinishDialog dialog) {
                         // Close current recipe
+                        RecipeContent content = new RecipeContent();
+                        ArrayList<String> tempsteps = new ArrayList<>();
+                        ArrayList<String> tempingred = new ArrayList<>();
+                        HashMap<String, String> tempimages = new HashMap<>();
+                        content.setTitle("Crab In Orange");
+                        content.setIntro("Very popular dish during Song dynasty of ancient China. A perfect combination of sweet sourness from orange with flavors of crabs!");
+
+                        tempingred.add("crab");
+                        tempingred.add("orange");
+                        tempingred.add("shrimp");
+                        tempingred.add("ginger");
+                        tempingred.add("salt");
+                        content.setIngredients(tempingred);
+
+                        tempimages.put("demo",
+                                "https://firebasestorage.googleapis.com/v0/b/icooking-db.appspot.com/o/orangecrab_demo.jpg?alt=media&token=88db250e-8950-43d5-bd25-3f951ade2ab3");
+                        tempsteps.add("1. Steam the crabs until they are properly cooked. Scoop out of the crab meat.");
+                        tempsteps.add("step1 image");
+                        tempimages.put("step1 image",
+                                "https://firebasestorage.googleapis.com/v0/b/icooking-db.appspot.com/o/orangecrab_step1.png?alt=media&token=2c0e0580-28e0-4383-b4b7-a3e5ec11d272");
+
+                        tempsteps.add("2. Scoop out of the pulp of orange. Fired the crab meat with salt, crashed ginger, shrimp and just a little bit of the orange pulp.");
+                        tempsteps.add("step2 image");
+                        tempimages.put("step2 image",
+                                "https://firebasestorage.googleapis.com/v0/b/icooking-db.appspot.com/o/orangecrab_step2.png?alt=media&token=b47175e1-50bd-4b0c-8f86-809ff2f7156d");
+
+                        tempsteps.add("3. Put the fried crab meat and shrimp into the orange that you just scoop pulp out from and steam it for 5 minutes.");
+                        tempsteps.add("step3 image");
+                        tempimages.put("step3 image",
+                                "https://firebasestorage.googleapis.com/v0/b/icooking-db.appspot.com/o/orangecrab_step3.png?alt=media&token=b5009af4-d465-4d99-be13-7d6f1098c40c");
+
+                        tempsteps.add("4. Take the orange out of the steamer and enjoy!");
+                        tempsteps.add("step4 image");
+                        tempimages.put("step4 image",
+                                "https://firebasestorage.googleapis.com/v0/b/icooking-db.appspot.com/o/orangecrab_step4.png?alt=media&token=b26a7e04-99ef-4c71-8ea7-c2c793b2f6f6");
+
+                        content.setImages(tempimages);
+                        content.setSteps(tempsteps);
+
+                        daoRecipe.add(content);
                         finish();
                     }
                 });
