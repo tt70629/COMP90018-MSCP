@@ -61,6 +61,7 @@ public class SearchedRecipeAdaptor extends RecyclerView.Adapter<SearchedRecipeAd
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mcontext,Recipe.class);
+                intent.putExtra("key_name",getKey(position));
                 mcontext.startActivity(intent);
             }
         });

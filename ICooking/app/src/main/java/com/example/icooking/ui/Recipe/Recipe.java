@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -71,6 +72,10 @@ public class Recipe extends AppCompatActivity {
         getSupportActionBar().hide();
 
         RecipeContent content = new RecipeContent();
+
+        Intent intent = getIntent();
+        key = intent.getStringExtra("key_name");
+        setKey(intent.getStringExtra("key_name"));
 
         toBuy = new ArrayList<>();
         toRemove = new HashMap<>();
