@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.icooking.ui.Inventory.Inventory;
 import com.example.icooking.databinding.FragmentNotificationsBinding;
+import com.example.icooking.ui.Inventory.InventoryAdaptor;
 import com.example.icooking.ui.Recipe.DAORecipe;
 import com.example.icooking.ui.Recipe.RecipeAdaptorIngredients;
 import com.example.icooking.ui.Recipe.RecipeContent;
@@ -65,7 +66,9 @@ public class NotificationsFragment extends Fragment {
     private boolean rough_search = false;
     private boolean search_mode_changed = false;
     private boolean initial_rec = true;
-    
+    private boolean no_ingredients = false;
+    private boolean smart_match = false;
+
 
     private HashMap<String, String> images;
     private ImageView imageDemo;
@@ -83,6 +86,7 @@ public class NotificationsFragment extends Fragment {
 
     ArrayList<Inventory> selected_ingredients = new ArrayList<>();
     ArrayList<Inventory> last_selected = new ArrayList<>();
+    ArrayList<Inventory> prior_ingredients = new ArrayList<>();
     ArrayList<RecipeContent> local_recipe_content = new ArrayList<>();
     ArrayList<RecipeContent> displayed_recipe_content = new ArrayList<>();
 
@@ -105,7 +109,7 @@ public class NotificationsFragment extends Fragment {
 
         //Set title
         cookbook_title = binding.titleCookbook;
-        cookbook_title.setText("Choose ingredient you from your inventory: ");
+        //cookbook_title.setText("Choose ingredient you from your inventory: ");
 
         matched_recipe_title = binding.matchedRecipeTitle;
         //matched_recipe_title.setText("");
@@ -118,7 +122,7 @@ public class NotificationsFragment extends Fragment {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         HashMap<String, Integer> stringIntegerHashMap = new HashMap<>();
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.TOP_DECORATION,10);
-        
+
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.BOTTOM_DECORATION,10);
 
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.LEFT_DECORATION,20);
@@ -147,6 +151,7 @@ public class NotificationsFragment extends Fragment {
         });
 
         CheckBox ck_rough_search = binding.roughSearchCheckbox;
+        //ck_rough_search.setChecked(true);
         ck_rough_search.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -155,7 +160,7 @@ public class NotificationsFragment extends Fragment {
                 search_mode_changed = true;
             }
         });
-        ck_rough_search.setChecked(false);
+        ck_rough_search.setChecked(true);
 
         manager=(SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         vibrator=(Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
@@ -260,6 +265,7 @@ public class NotificationsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<Inventory> inventoryList = new ArrayList<>();
+                ArrayList<Inventory> local_inventoryList = new ArrayList<>();
                 for (DataSnapshot data: snapshot.getChildren()){
                     Inventory inventory=data.getValue(Inventory.class);
                     inventory.setKey(data.getKey());
@@ -268,6 +274,34 @@ public class NotificationsFragment extends Fragment {
                 }
                 invAdaptor.setInventory(inventoryList);
                 invAdaptor.notifyDataSetChanged();
+                local_inventoryList.addAll(inventoryList);
+                if(inventoryList.isEmpty()){
+                    no_ingredients = true;
+                } else {
+                    while (local_inventoryList.size() > 0) {
+                        int min = 10000;
+                        Inventory temp_inventory = new Inventory();
+                        for (int i = 0; i < local_inventoryList.size(); i++) {
+                            if (Integer.parseInt(InventoryAdaptor.getDayLeft(local_inventoryList.get(i).getExpiryDate())) < min) {
+                                temp_inventory = local_inventoryList.get(i);
+                                min = Integer.parseInt(InventoryAdaptor.getDayLeft(local_inventoryList.get(i).getExpiryDate()));
+                            }
+                        }
+                        prior_ingredients.add(temp_inventory);
+                        local_inventoryList.remove(temp_inventory);
+                    }
+                    if (prior_ingredients.size() > 3){
+                        for (int i=3;i<prior_ingredients.size();i++){
+                            prior_ingredients.remove(prior_ingredients.get(i));
+                        }
+                    }
+                    System.out.println(prior_ingredients.size());
+                }
+                if(no_ingredients){
+                    cookbook_title.setText("You don't have any ingredients. Please add ingredients! ");
+                } else {
+                    cookbook_title.setText("Choose ingredient from your inventory: ");
+                }
             }
 
             @Override
@@ -281,16 +315,62 @@ public class NotificationsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<RecipeContent> recipeContentList = new ArrayList<>();
-                for (DataSnapshot data: snapshot.getChildren()){
-                    RecipeContent recipeContent = data.getValue(RecipeContent.class);
-                    recipeContent.setKey(data.getKey());
-                    for(int i=0;i<3;i++) {
-                        recipeContentList.add(recipeContent);
+                ArrayList<RecipeContent> add_list = new ArrayList<>();
+                Random rd = new Random();
+                int matched_number = 0;
+                if(prior_ingredients.size()>0){
+                    for (DataSnapshot data: snapshot.getChildren()){
+                        RecipeContent recipeContent = data.getValue(RecipeContent.class);
+                        recipeContent.setKey(data.getKey());
+
+                        for (int i = 0; i < prior_ingredients.size(); i++) {
+                            for (int j = 0; j < recipeContent.getIngredients().size(); j++) {
+                                if (prior_ingredients.get(i).getIngredientName().equals(recipeContent.getIngredients().get(j))) {
+                                    matched_number += 1;
+                                }
+
+                            }
+                        }
+                        if(matched_number > 0){
+                            //System.out.println("wow: " + matched_number + "are matched");
+                            recipeContentList.add(recipeContent);
+                        }
                     }
+                    if(recipeContentList.size() > 3){
+                        for(int i=0;i<3;i++) {
+                            int random_number = rd.nextInt(recipeContentList.size());
+                            add_list.add(recipeContentList.get(random_number));
+                        }
+                        recAdaptor.setRecipeContent(add_list);
+                    } else {
+                        recAdaptor.setRecipeContent(recipeContentList);
+                    }
+
                 }
 
-                recAdaptor.setRecipeContent(recipeContentList);
+                if(prior_ingredients.isEmpty() || recipeContentList.isEmpty()){
+                    smart_match = false;
+                    for (DataSnapshot data: snapshot.getChildren()){
+                        RecipeContent recipeContent = data.getValue(RecipeContent.class);
+                        recipeContent.setKey(data.getKey());
+                        recipeContentList.add(recipeContent);
+                    }
+                    if(recipeContentList.size() > 3){
+                        for(int i=0;i<3;i++) {
+                            int random_number = rd.nextInt(recipeContentList.size());
+                            add_list.add(recipeContentList.get(random_number));
+                        }
+                        recAdaptor.setRecipeContent(add_list);
+                    } else {
+                        recAdaptor.setRecipeContent(recipeContentList);
+                    }
+                } else {
+                    smart_match = true;
+                }
+
+                //recAdaptor.setRecipeContent(add_list);
                 recAdaptor.notifyDataSetChanged();
+
             }
 
             @Override
@@ -343,7 +423,12 @@ public class NotificationsFragment extends Fragment {
                     //recAdaptor.setRecipeContent(local_recipe_content);
                     if(local_recipe_content.size() == 0){
                         System.out.println("dont have any");
-                        
+                        initialFetchRecipeData();
+                        if (smart_match){
+                            System.out.println("smart!");
+                        } else {
+                            System.out.println("stupid");
+                        }
                     } else if(local_recipe_content.size() > 0 && local_recipe_content.size() <= 3) {
                         recAdaptor.setRecipeContent(local_recipe_content);
                         run_out_choice = true;
