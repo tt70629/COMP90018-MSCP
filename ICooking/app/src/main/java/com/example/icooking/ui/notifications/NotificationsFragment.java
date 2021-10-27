@@ -278,11 +278,18 @@ public class NotificationsFragment extends Fragment {
                 if(inventoryList.isEmpty()){
                     no_ingredients = true;
                 } else {
-                    while (local_inventoryList.size() > 0) {
+                    int expiry_count = 0;
+                    for(int i=0;i<local_inventoryList.size();i++){
+                        if(Integer.parseInt(InventoryAdaptor.getDayLeft(local_inventoryList.get(i).getExpiryDate())) <=0){
+                            expiry_count += 1;
+                        }
+                    }
+                    while (local_inventoryList.size() > expiry_count) {
                         int min = 10000;
                         Inventory temp_inventory = new Inventory();
                         for (int i = 0; i < local_inventoryList.size(); i++) {
-                            if (Integer.parseInt(InventoryAdaptor.getDayLeft(local_inventoryList.get(i).getExpiryDate())) < min) {
+                            if (Integer.parseInt(InventoryAdaptor.getDayLeft(local_inventoryList.get(i).getExpiryDate())) < min
+                            && Integer.parseInt(InventoryAdaptor.getDayLeft(local_inventoryList.get(i).getExpiryDate())) > 0) {
                                 temp_inventory = local_inventoryList.get(i);
                                 min = Integer.parseInt(InventoryAdaptor.getDayLeft(local_inventoryList.get(i).getExpiryDate()));
                             }
@@ -318,6 +325,9 @@ public class NotificationsFragment extends Fragment {
                 ArrayList<RecipeContent> add_list = new ArrayList<>();
                 Random rd = new Random();
                 int matched_number = 0;
+                for(int i=0;i<prior_ingredients.size();i++){
+                    System.out.println(prior_ingredients.get(i).getIngredientName());
+                }
                 if(prior_ingredients.size()>0){
                     for (DataSnapshot data: snapshot.getChildren()){
                         RecipeContent recipeContent = data.getValue(RecipeContent.class);
@@ -335,6 +345,7 @@ public class NotificationsFragment extends Fragment {
                             //System.out.println("wow: " + matched_number + "are matched");
                             recipeContentList.add(recipeContent);
                         }
+                        matched_number = 0;
                     }
                     if(recipeContentList.size() > 3){
                         for(int i=0;i<3;i++) {
@@ -345,6 +356,7 @@ public class NotificationsFragment extends Fragment {
                     } else {
                         recAdaptor.setRecipeContent(recipeContentList);
                     }
+
 
                 }
 
@@ -413,13 +425,14 @@ public class NotificationsFragment extends Fragment {
                                 recipeContentList.add(recipeContent);
                             }
                         }
+                        matched_number = 0;
                     }
                     if (!local_recipe_content.isEmpty()) {
                         local_recipe_content.clear();
                     }
-                    for(int i=0;i<8;i++) {
-                        local_recipe_content.addAll(recipeContentList);
-                    }
+
+                    local_recipe_content.addAll(recipeContentList);
+                   
                     //recAdaptor.setRecipeContent(local_recipe_content);
                     if(local_recipe_content.size() == 0){
                         System.out.println("dont have any");
