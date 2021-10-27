@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import static android.content.Context.PEOPLE_SERVICE;
 import static android.content.Context.SENSOR_SERVICE;
 import static android.content.Context.VIBRATOR_SERVICE;
 
@@ -272,24 +273,28 @@ public class NotificationsFragment extends Fragment {
                     inventory.setSelected(false);
                     inventoryList.add(inventory);
                 }
+
+                //int expiry_count = 0;
+                for(int i=0;i<inventoryList.size();i++){
+                    if(Integer.parseInt(InventoryAdaptor.getDayLeft(inventoryList.get(i).getExpiryDate())) <=0){
+                        //expiry_count += 1;
+                        inventoryList.remove(i);
+                    }
+                }
+
                 invAdaptor.setInventory(inventoryList);
                 invAdaptor.notifyDataSetChanged();
                 local_inventoryList.addAll(inventoryList);
+
+
                 if(inventoryList.isEmpty()){
                     no_ingredients = true;
                 } else {
-                    int expiry_count = 0;
-                    for(int i=0;i<local_inventoryList.size();i++){
-                        if(Integer.parseInt(InventoryAdaptor.getDayLeft(local_inventoryList.get(i).getExpiryDate())) <=0){
-                            expiry_count += 1;
-                        }
-                    }
-                    while (local_inventoryList.size() > expiry_count) {
+                    while (local_inventoryList.size() > 0) {
                         int min = 10000;
                         Inventory temp_inventory = new Inventory();
                         for (int i = 0; i < local_inventoryList.size(); i++) {
-                            if (Integer.parseInt(InventoryAdaptor.getDayLeft(local_inventoryList.get(i).getExpiryDate())) < min
-                            && Integer.parseInt(InventoryAdaptor.getDayLeft(local_inventoryList.get(i).getExpiryDate())) > 0) {
+                            if (Integer.parseInt(InventoryAdaptor.getDayLeft(local_inventoryList.get(i).getExpiryDate())) < min) {
                                 temp_inventory = local_inventoryList.get(i);
                                 min = Integer.parseInt(InventoryAdaptor.getDayLeft(local_inventoryList.get(i).getExpiryDate()));
                             }
@@ -302,7 +307,7 @@ public class NotificationsFragment extends Fragment {
                             prior_ingredients.remove(prior_ingredients.get(i));
                         }
                     }
-                    System.out.println(prior_ingredients.size());
+                    //System.out.println(prior_ingredients.size());
                 }
                 if(no_ingredients){
                     cookbook_title.setText("You don't have any ingredients. Please add ingredients! ");
@@ -342,8 +347,19 @@ public class NotificationsFragment extends Fragment {
                             }
                         }
                         if(matched_number > 0){
+                            boolean add = true;
                             //System.out.println("wow: " + matched_number + "are matched");
-                            recipeContentList.add(recipeContent);
+                            for(int i=0;i<recipeContentList.size();i++){
+                                if(recipeContentList.contains(recipeContent)){
+                                    add = false;
+                                    //System.out.println("??????????????????????????");
+                                }
+                            }
+                            if(add) {
+                                recipeContentList.add(recipeContent);
+                                System.out.println(recipeContent.getTitle());
+                            }
+                            //System.out.println(recipeContentList.size());
                         }
                         matched_number = 0;
                     }
@@ -351,16 +367,21 @@ public class NotificationsFragment extends Fragment {
                         for(int i=0;i<3;i++) {
                             int random_number = rd.nextInt(recipeContentList.size());
                             add_list.add(recipeContentList.get(random_number));
+                            recipeContentList.remove(recipeContentList.get(random_number));
                         }
                         recAdaptor.setRecipeContent(add_list);
+                        //System.out.println(add_list.size());
+                        //System.out.println(recipeContentList.size());
                     } else {
                         recAdaptor.setRecipeContent(recipeContentList);
+                        //System.out.println(recipeContentList.size());
                     }
 
 
                 }
 
                 if(prior_ingredients.isEmpty() || recipeContentList.isEmpty()){
+
                     smart_match = false;
                     for (DataSnapshot data: snapshot.getChildren()){
                         RecipeContent recipeContent = data.getValue(RecipeContent.class);
@@ -371,6 +392,7 @@ public class NotificationsFragment extends Fragment {
                         for(int i=0;i<3;i++) {
                             int random_number = rd.nextInt(recipeContentList.size());
                             add_list.add(recipeContentList.get(random_number));
+                            recipeContentList.remove(recipeContentList.get(random_number));
                         }
                         recAdaptor.setRecipeContent(add_list);
                     } else {
