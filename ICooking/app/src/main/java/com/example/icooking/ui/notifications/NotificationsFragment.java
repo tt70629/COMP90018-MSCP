@@ -43,6 +43,7 @@ import java.util.Random;
 
 import static android.content.Context.PEOPLE_SERVICE;
 import static android.content.Context.SENSOR_SERVICE;
+import static android.content.Context.SYSTEM_HEALTH_SERVICE;
 import static android.content.Context.VIBRATOR_SERVICE;
 
 public class NotificationsFragment extends Fragment {
@@ -346,20 +347,8 @@ public class NotificationsFragment extends Fragment {
 
                             }
                         }
-                        if(matched_number > 0){
-                            boolean add = true;
-                            //System.out.println("wow: " + matched_number + "are matched");
-                            for(int i=0;i<recipeContentList.size();i++){
-                                if(recipeContentList.contains(recipeContent)){
-                                    add = false;
-                                    //System.out.println("??????????????????????????");
-                                }
-                            }
-                            if(add) {
-                                recipeContentList.add(recipeContent);
-                                System.out.println(recipeContent.getTitle());
-                            }
-                            //System.out.println(recipeContentList.size());
+                        if(matched_number>0) {
+                            recipeContentList.add(recipeContent);
                         }
                         matched_number = 0;
                     }
@@ -376,12 +365,20 @@ public class NotificationsFragment extends Fragment {
                         recAdaptor.setRecipeContent(recipeContentList);
                         //System.out.println(recipeContentList.size());
                     }
-
+                    //System.out.println(recipeContentList.size()+"and"+prior_ingredients.size());
 
                 }
 
                 if(prior_ingredients.isEmpty() || recipeContentList.isEmpty()){
-
+                    if(initial_rec) {
+                        if (recipeContentList.isEmpty() && !prior_ingredients.isEmpty()) {
+                            matched_recipe_title.setText("No recipes matches with your close-to-expiry ingredients. " +
+                                    "We guess you would like: ");
+                        }
+                        if (recipeContentList.isEmpty() && prior_ingredients.isEmpty()) {
+                            matched_recipe_title.setText("We guess you would like: ");
+                        }
+                    }
                     smart_match = false;
                     for (DataSnapshot data: snapshot.getChildren()){
                         RecipeContent recipeContent = data.getValue(RecipeContent.class);
@@ -399,7 +396,11 @@ public class NotificationsFragment extends Fragment {
                         recAdaptor.setRecipeContent(recipeContentList);
                     }
                 } else {
+                    if(initial_rec) {
+                        matched_recipe_title.setText("We matched some recipes based on your close-to-expiry ingredients: ");
+                    }
                     smart_match = true;
+                    //System.out.println(recipeContentList.size()+"and"+prior_ingredients.size());
                 }
 
                 //recAdaptor.setRecipeContent(add_list);
@@ -461,14 +462,24 @@ public class NotificationsFragment extends Fragment {
                         initialFetchRecipeData();
                         if (smart_match){
                             System.out.println("smart!");
+                            matched_recipe_title.setText(" ");
+                            matched_recipe_title.setText("No recipe matched with the selected ingredients. " +
+                                    "We recommend these recipes based on your close-to-expiry ingredients: ");
                         } else {
                             System.out.println("stupid");
+                            matched_recipe_title.setText(" ");
+                            matched_recipe_title.setText("No recipe matched with the selected ingredients and close-to-expiry ingredients." +
+                                    " We guess you would like: ");
                         }
                     } else if(local_recipe_content.size() > 0 && local_recipe_content.size() <= 3) {
+                        matched_recipe_title.setText(" ");
+                        matched_recipe_title.setText("Here are some matched recipes: ");
                         recAdaptor.setRecipeContent(local_recipe_content);
                         run_out_choice = true;
                         Toast.makeText(getContext(),"There are no more recommendations for the ingredients!",Toast.LENGTH_SHORT).show();
                     } else if(local_recipe_content.size() > 3){
+                        matched_recipe_title.setText(" ");
+                        matched_recipe_title.setText("Here are some matched recipes: ");
                         if(!displayed_recipe_content.isEmpty()){
                             displayed_recipe_content.clear();
                         }
@@ -484,12 +495,28 @@ public class NotificationsFragment extends Fragment {
                 } else {
                     if(local_recipe_content.size() == 0){
                         System.out.println("dont have any");
+                        initialFetchRecipeData();
+                        if (smart_match){
+                            System.out.println("smart!");
+                            matched_recipe_title.setText(" ");
+                            matched_recipe_title.setText("No recipe matched with the selected ingredients. " +
+                                    "We recommend these recipes based on your close-to-expiry ingredients.");
+                        } else {
+                            System.out.println("stupid");
+                            matched_recipe_title.setText(" ");
+                            matched_recipe_title.setText("No recipe matched with the selected ingredients and close-to-expiry ingredients." +
+                                    " We guess you would like: ");
+                        }
 
                     } else if(local_recipe_content.size() > 0 && local_recipe_content.size() <= 3) {
+                        matched_recipe_title.setText(" ");
+                        matched_recipe_title.setText("Here are some matched recipes: ");
                         recAdaptor.setRecipeContent(local_recipe_content);
                         run_out_choice = true;
                         Toast.makeText(getContext(),"There are no more recommendations for the ingredients!",Toast.LENGTH_SHORT).show();
                     } else if(local_recipe_content.size() > 3){
+                        matched_recipe_title.setText(" ");
+                        matched_recipe_title.setText("Here are some matched recipes: ");
                         if(!displayed_recipe_content.isEmpty()){
                             displayed_recipe_content.clear();
                         }
