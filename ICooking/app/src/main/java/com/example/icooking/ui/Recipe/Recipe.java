@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.example.icooking.ui.Inventory.Inventory;
 import com.example.icooking.R;
 import com.example.icooking.ui.Inventory.DAOInventory;
+import com.example.icooking.ui.Inventory.InventoryAdaptor;
 import com.example.icooking.ui.home.Buylist;
 import com.example.icooking.ui.home.DAObuylist;
 import com.google.firebase.database.DataSnapshot;
@@ -176,18 +177,6 @@ public class Recipe extends AppCompatActivity {
                         adaptorIngred.remove();
                         // Close current recipe
                         finish();
-
-//              Ignore the following comment.
-//                        assert etName != null;
-//                        assert etDay != null;
-//                        daoRecipe.add(content)
-//                                .addOnSuccessListener(success -> {
-//                                    Toast.makeText(Recipe.this,"Add ingredient successfully",Toast.LENGTH_SHORT).show();
-//                                }).addOnFailureListener(err->{
-//                            Toast.makeText(Recipe.this,err.getMessage(),Toast.LENGTH_SHORT).show();
-//                        });
-//                        Intent intent = new Intent(Recipe.this, NotificationsFragment.class);
-//                        startActivity(intent);
                     }
                 });
                 dialog.setNoListener(new FinishDialog.IOnNoListener() {
@@ -195,7 +184,6 @@ public class Recipe extends AppCompatActivity {
                     @Override
                     public void onNo(FinishDialog dialog) {
                         // Close current recipe
-                        
                         finish();
                     }
                 });
@@ -216,6 +204,11 @@ public class Recipe extends AppCompatActivity {
                     Inventory inventory=data.getValue(Inventory.class);
                     inventory.setKey(data.getKey());
                     inventoryList.add(inventory);
+                }
+                for(int i=0;i<inventoryList.size();i++){
+                    if(Integer.parseInt(InventoryAdaptor.getDayLeft(inventoryList.get(i).getExpiryDate())) <=0){
+                        inventoryList.remove(i);
+                    }
                 }
                 adaptorIngred.setInventory(inventoryList);
                 adaptorIngred.notifyDataSetChanged();
