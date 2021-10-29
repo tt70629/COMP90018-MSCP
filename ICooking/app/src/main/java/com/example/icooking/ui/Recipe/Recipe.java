@@ -91,7 +91,6 @@ public class Recipe extends AppCompatActivity {
 
         tvIngred = findViewById(R.id.tv_title_ingredient);
         tvIngred.setText("Ingredients");
-        //tvIngred.setTextColor(Color.parseColor("#eb4034"));
 
         tvStep = findViewById(R.id.tv_title_step);
         tvStep.setText("Steps");
