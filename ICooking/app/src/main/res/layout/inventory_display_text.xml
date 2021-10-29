@@ -18,6 +18,11 @@
         android:layout_marginBottom="10dp"
         android:layout_marginStart="2.5dp"
         android:layout_marginEnd="5dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
 
 
         android:text="inventory"/>

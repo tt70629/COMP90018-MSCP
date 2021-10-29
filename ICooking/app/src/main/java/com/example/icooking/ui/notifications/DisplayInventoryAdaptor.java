@@ -104,6 +104,7 @@ public class DisplayInventoryAdaptor extends RecyclerView.Adapter<DisplayInvento
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ingredientName = itemView.findViewById(R.id.inventory_display);
+            ingredientName.setSelected(true);
             //this.onItemClickListener = onItemClickListener;
             //itemView.setOnClickListener(this);
         }
