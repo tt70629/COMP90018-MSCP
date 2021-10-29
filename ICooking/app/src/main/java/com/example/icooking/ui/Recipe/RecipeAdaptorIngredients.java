@@ -61,12 +61,16 @@ public class RecipeAdaptorIngredients extends RecyclerView.Adapter<RecipeAdaptor
         if (inventoryNames.contains(ingredients.get(position))){
             toRemove.put(ingredients.get(position), tempInventory.get(ingredients.get(position)));
             holder.ingredientName.setText(ingredients.get(position));
-            holder.ingredientName.setBackgroundColor(Color.parseColor("#32a852"));
+            holder.ingredientName.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            /*holder.ingredientName.setBackgroundColor(Color.parseColor(""));*/
+            holder.ingredientName.setTextColor(Color.WHITE);
+            holder.ingredientName.setBackgroundResource(R.drawable.selected_round);
         }
         // If it's not in Inventory.
         else {
             toBuy.add(ingredients.get(position));
             holder.ingredientName.setText(ingredients.get(position));
+            holder.ingredientName.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         }
     }
 
