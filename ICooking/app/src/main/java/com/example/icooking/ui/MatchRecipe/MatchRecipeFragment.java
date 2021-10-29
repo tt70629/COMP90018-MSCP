@@ -1,7 +1,6 @@
-package com.example.icooking.ui.notifications;
+package com.example.icooking.ui.MatchRecipe;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -42,15 +41,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import static android.content.Context.PEOPLE_SERVICE;
 import static android.content.Context.SENSOR_SERVICE;
-import static android.content.Context.SYSTEM_HEALTH_SERVICE;
 import static android.content.Context.VIBRATOR_SERVICE;
 
-public class NotificationsFragment extends Fragment {
+public class MatchRecipeFragment extends Fragment {
 
 
-    private NotificationsViewModel notificationsViewModel;
+    private MatchRecipeViewModel matchRecipeViewModel;
     private FragmentNotificationsBinding binding;
     private DAOInventory daoInventory;
     private DAORecipe daoRecipe;
@@ -84,7 +81,6 @@ public class NotificationsFragment extends Fragment {
     private boolean ready_to_search = false;
     private int search_counter = 0;
     private long last_time = 0;
-    //private long current_time = 0;
 
 
     ArrayList<Inventory> selected_ingredients = new ArrayList<>();
@@ -96,19 +92,11 @@ public class NotificationsFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                new ViewModelProvider(this).get(NotificationsViewModel.class);
+        matchRecipeViewModel =
+                new ViewModelProvider(this).get(MatchRecipeViewModel.class);
 
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        /*final TextView textView = binding.textNotifications;
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });*/
 
         //Set title
         cookbook_title = binding.titleCookbook;
@@ -160,7 +148,6 @@ public class NotificationsFragment extends Fragment {
         ck_rough_search.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                //System.out.println(b);
                 rough_search = b;
                 search_mode_changed = true;
             }
@@ -230,7 +217,6 @@ public class NotificationsFragment extends Fragment {
             selected_ingredients=invAdaptor.selected_ingredients;
             if(last_selected.isEmpty()){
                 selection_changed = true;
-                //System.out.println(selection_changed);
                 last_selected.addAll(selected_ingredients);
             } else {
                 int counter = 0;
@@ -239,7 +225,7 @@ public class NotificationsFragment extends Fragment {
                         if (last_selected.get(i).getIngredientName().equals(selected_ingredients.get(j).getIngredientName())){
                             counter += 1;
                         } else {
-                            //last_selected = selected_ingredients;
+
                         }
                     }
                 }
@@ -278,10 +264,8 @@ public class NotificationsFragment extends Fragment {
                     inventoryList.add(inventory);
                 }
 
-                //int expiry_count = 0;
                 for(int i=0;i<inventoryList.size();i++){
                     if(Integer.parseInt(InventoryAdaptor.getDayLeft(inventoryList.get(i).getExpiryDate())) <=0){
-                        //expiry_count += 1;
                         inventoryList.remove(i);
                     }
                 }
@@ -311,7 +295,6 @@ public class NotificationsFragment extends Fragment {
                             prior_ingredients.remove(prior_ingredients.get(i));
                         }
                     }
-                    //System.out.println(prior_ingredients.size());
                 }
                 if(no_ingredients){
                     cookbook_title.setText("You don't have any ingredients. Please add ingredients! ");
@@ -362,14 +345,9 @@ public class NotificationsFragment extends Fragment {
                             recipeContentList.remove(recipeContentList.get(random_number));
                         }
                         recAdaptor.setRecipeContent(add_list);
-                        //System.out.println(add_list.size());
-                        //System.out.println(recipeContentList.size());
                     } else {
                         recAdaptor.setRecipeContent(recipeContentList);
-                        //System.out.println(recipeContentList.size());
                     }
-                    //System.out.println(recipeContentList.size()+"and"+prior_ingredients.size());
-
                 }
 
                 if(prior_ingredients.isEmpty() || recipeContentList.isEmpty()){
@@ -430,7 +408,6 @@ public class NotificationsFragment extends Fragment {
                     for (DataSnapshot data : snapshot.getChildren()) {
                         RecipeContent recipeContent = data.getValue(RecipeContent.class);
                         recipeContent.setKey(data.getKey());
-                        //recipeContentList.add(recipeContent);
                         for (int i = 0; i < selected_ingredients.size(); i++) {
                             for (int j = 0; j < recipeContent.getIngredients().size(); j++) {
                                 if (selected_ingredients.get(i).getIngredientName().equals(recipeContent.getIngredients().get(j))) {
@@ -440,7 +417,6 @@ public class NotificationsFragment extends Fragment {
                             }
                         }
                         if(rough_search) {
-                            //if (recipeContent.getIngredients().size() - matched_number < 3) {
                             if(matched_number > 0){
                                 System.out.println("wow: " + matched_number + "are matched");
                                 recipeContentList.add(recipeContent);
@@ -458,8 +434,7 @@ public class NotificationsFragment extends Fragment {
                     }
 
                     local_recipe_content.addAll(recipeContentList);
-                   
-                    //recAdaptor.setRecipeContent(local_recipe_content);
+
                     if(local_recipe_content.size() == 0){
                         System.out.println("dont have any");
                         initialFetchRecipeData();
@@ -533,21 +508,7 @@ public class NotificationsFragment extends Fragment {
                     }
 
                 }
-                /*if (recipeContentList.isEmpty()){
-                    recAdaptor.setRecipeContent(recipeContentList);
-                    matched_recipe_title.setText("Here are no more recommendations!");
-                } else{
-                    matched_recipe_title.setText("Here are some recommendations: ");
-                    if (recipeContentList.size() <= 3){
-                        recAdaptor.setRecipeContent(recipeContentList);
-                    }
-                    if (recipeContentList.size() > 3){
-
-                    }
-                }*/
-                //recAdaptor.setRecipeContent(recipeContentList);
                 recAdaptor.notifyDataSetChanged();
-                //System.out.println(recipeContentList.get(0).getTitle());
             }
 
             @Override
@@ -561,24 +522,4 @@ public class NotificationsFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
-
-    /*@Override
-    public void onClick(int position) {
-        {
-
-            Toast.makeText(bcontext, "here: +", Toast.LENGTH_SHORT).show();
-            System.out.println("???????????");
-            //adaptor.getInventory(position).setSelected(true);
-            //Toast.makeText(bcontext,"here: " + adaptor.getInventory(position).isSelected(), Toast.LENGTH_SHORT).show();
-            //view.setBackgroundColor(Color.GREEN);
-            // selected_ingredients.add(inventoryList.get(position));
-
-
-            //Toast.makeText(mcontext, selected_ingredients.size() + "is selected:" + inventoryList.get(position).isSelected(), Toast.LENGTH_SHORT).show();
-
-            //mListener.onItemClick(position);
-            //Toast.makeText(mcontext,"here:" + inventoryList.get(0).getIngredientName(), Toast.LENGTH_SHORT).show();
-        }
-    }*/
 }

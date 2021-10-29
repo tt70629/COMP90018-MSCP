@@ -1,16 +1,16 @@
-package com.example.icooking.ui.notifications;
+package com.example.icooking.ui.MatchRecipe;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class NotificationsViewModel extends ViewModel {
+public class MatchRecipeViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public NotificationsViewModel() {
+    public MatchRecipeViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
+        mText.setValue("This is match recipe fragment");
     }
 
     public LiveData<String> getText() {

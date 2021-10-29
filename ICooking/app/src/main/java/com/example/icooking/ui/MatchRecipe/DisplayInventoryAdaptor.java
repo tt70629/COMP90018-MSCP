@@ -1,4 +1,4 @@
-package com.example.icooking.ui.notifications;
+package com.example.icooking.ui.MatchRecipe;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,21 +24,9 @@ public class DisplayInventoryAdaptor extends RecyclerView.Adapter<DisplayInvento
     ArrayList<Inventory> selected_ingredients = new ArrayList<>();
 
     private Context mcontext;
-    //private OnItemClickListener mListener;
-    //OnItemClickHandler mOnItemClickListener;
-
-
-
 
     public DisplayInventoryAdaptor() {
-        //this.mOnItemClickListener=onItemClickHandler;
-        //this.mcontext = mcontext;
-       /* test_list[0] = 1;
-        test_list[1] =4;
-        test_list[2] =6;*/
-        //this.inventoryList = inventoryList;
-        //this.mListener = mListener;
-        //this.selected_ingredients = selected_ingredients;
+
     }
 
 
@@ -65,7 +53,6 @@ public class DisplayInventoryAdaptor extends RecyclerView.Adapter<DisplayInvento
             public void onClick(View view) {
                 if (!inventoryList.get(position).isSelected()) {
                     inventoryList.get(position).setSelected(true);
-                    //view.setBackgroundColor(Color.GREEN);
                     holder.ingredientName.setTextColor(Color.WHITE);
                     if(Integer.parseInt(InventoryAdaptor.getDayLeft(inventoryList.get(position).getExpiryDate())) <=3){
                         holder.itemView.setBackgroundResource(R.drawable.expiry_ingredients_selected);
@@ -76,7 +63,6 @@ public class DisplayInventoryAdaptor extends RecyclerView.Adapter<DisplayInvento
 
                 } else {
                     inventoryList.get(position).setSelected(false);
-                    //view.setBackgroundColor(Color.WHITE);
                     holder.ingredientName.setTextColor(Color.GRAY);
                     if(Integer.parseInt(InventoryAdaptor.getDayLeft(inventoryList.get(position).getExpiryDate())) <=3){
                         holder.itemView.setBackgroundResource(R.drawable.expiry_ingredients_box);
@@ -85,10 +71,6 @@ public class DisplayInventoryAdaptor extends RecyclerView.Adapter<DisplayInvento
                     }
                     selected_ingredients.remove(inventoryList.get(position));
                 }
-                //Toast.makeText(mcontext, selected_ingredients.size() + "is selected:" + inventoryList.get(position).isSelected(), Toast.LENGTH_SHORT).show();
-
-                //mListener.onItemClick(position);
-                //Toast.makeText(mcontext,"here:" + inventoryList.get(0).getIngredientName(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -100,31 +82,18 @@ public class DisplayInventoryAdaptor extends RecyclerView.Adapter<DisplayInvento
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView ingredientName;
-        //OnItemClickListener onItemClickListener;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ingredientName = itemView.findViewById(R.id.inventory_display);
             ingredientName.setSelected(true);
-            //this.onItemClickListener = onItemClickListener;
-            //itemView.setOnClickListener(this);
         }
-
-        /*@Override
-        public void onClick(View view) { onItemClickListener.onClick(getAdapterPosition());
-        }*/
     }
-    /*interface OnItemClickHandler {
-        void ingredient_selected(Inventory inventory);
-        //void removeItem(int position);
-    }*/
+
 
     public String getKey(int position) {
         return inventoryList.get(position).getKey();
     }
 
-    /*public ArrayList<Inventory> getInventory() {
-        return selected_ingredients;
-    }*/
     public Inventory getInventory(int position){
         return inventoryList.get(position);
     }
@@ -133,13 +102,5 @@ public class DisplayInventoryAdaptor extends RecyclerView.Adapter<DisplayInvento
         this.inventoryList = inventoryList;
         notifyDataSetChanged();
     }
-
-    /*public void setmListener(OnItemClickListener mListener){
-        this.mListener = mListener;
-    }*/
-
-    /*public interface OnItemClickListener{
-        void onClick(int position);
-    }*/
 }
 

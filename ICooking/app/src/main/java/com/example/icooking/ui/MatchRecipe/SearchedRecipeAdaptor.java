@@ -1,4 +1,4 @@
-package com.example.icooking.ui.notifications;
+package com.example.icooking.ui.MatchRecipe;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,13 +27,10 @@ public class SearchedRecipeAdaptor extends RecyclerView.Adapter<SearchedRecipeAd
     ArrayList<RecipeContent> all_recipes = new ArrayList<>();
     ArrayList<RecipeContent> matched_recipes = new ArrayList<>();
     private Context mcontext;
-    private Context tcontext;
 
 
     public SearchedRecipeAdaptor(Context mcontext){
-        //this.matched_recipes = matched_recipes;
         this.mcontext = mcontext;
-        //this.tcontext = tcontext;
     }
 
     @NonNull
@@ -92,19 +89,4 @@ public class SearchedRecipeAdaptor extends RecyclerView.Adapter<SearchedRecipeAd
         this.matched_recipes=matched_recipes;
         notifyDataSetChanged();
     }
-
-    /*public Drawable GetDrawableFromUrl(String url){
-        try{
-            URLConnection urls =new URL(url).openConnection();
-            return  Drawable.createFromStream(urls.getInputStream(),"image");
-        }
-        catch (MalformedURLException e){
-            e.printStackTrace();
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-        return  null;
-    }*/
-
 }

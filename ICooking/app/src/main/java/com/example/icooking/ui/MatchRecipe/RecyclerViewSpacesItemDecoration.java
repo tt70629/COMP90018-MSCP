@@ -1,4 +1,4 @@
-package com.example.icooking.ui.notifications;
+package com.example.icooking.ui.MatchRecipe;
 
 import android.graphics.Rect;
 import android.view.View;
@@ -22,19 +22,19 @@ public class RecyclerViewSpacesItemDecoration extends RecyclerView.ItemDecoratio
     }
 
     @Override
-    public void getItemOffsets(Rect outRect, View view,
-                               RecyclerView parent, RecyclerView.State state) {
-        if (mSpaceValueMap.get(TOP_DECORATION) != null)
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        if (mSpaceValueMap.get(TOP_DECORATION) != null) {
             outRect.top = mSpaceValueMap.get(TOP_DECORATION);
-        if (mSpaceValueMap.get(LEFT_DECORATION) != null)
-
+        }
+        if (mSpaceValueMap.get(LEFT_DECORATION) != null){
             outRect.left = mSpaceValueMap.get(LEFT_DECORATION);
-        if (mSpaceValueMap.get(RIGHT_DECORATION) != null)
+        }
+        if (mSpaceValueMap.get(RIGHT_DECORATION) != null) {
             outRect.right = mSpaceValueMap.get(RIGHT_DECORATION);
-        if (mSpaceValueMap.get(BOTTOM_DECORATION) != null)
-
+        }
+        if (mSpaceValueMap.get(BOTTOM_DECORATION) != null){
             outRect.bottom = mSpaceValueMap.get(BOTTOM_DECORATION);
-
+        }
     }
 
 }
