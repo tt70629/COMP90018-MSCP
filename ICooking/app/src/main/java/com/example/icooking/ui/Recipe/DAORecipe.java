@@ -40,9 +40,9 @@ public class DAORecipe {
     {
         if(key == null)
         {
-            return databaseReference.orderByKey().limitToFirst(8);
+            return databaseReference.orderByKey().limitToFirst(100);
         }
-        return databaseReference.orderByKey().startAfter(key).limitToFirst(8);
+        return databaseReference.orderByKey().startAfter(key).limitToFirst(100);
     }
 
     public Query get()

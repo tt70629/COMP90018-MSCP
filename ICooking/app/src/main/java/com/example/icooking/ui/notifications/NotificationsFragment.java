@@ -1,6 +1,7 @@
 package com.example.icooking.ui.notifications;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -122,6 +123,7 @@ public class NotificationsFragment extends Fragment {
         invAdaptor= new DisplayInventoryAdaptor();
         currentInventory.setAdapter(invAdaptor);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+
         HashMap<String, Integer> stringIntegerHashMap = new HashMap<>();
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.TOP_DECORATION,10);
 
@@ -134,6 +136,7 @@ public class NotificationsFragment extends Fragment {
         currentInventory.setLayoutManager(layoutManager);
         daoInventory = new DAOInventory();
         fetchInventoryData();
+
 
         final RecyclerView searchedRecipe = binding.searchedRecipe;
         recAdaptor = new SearchedRecipeAdaptor(getContext());
