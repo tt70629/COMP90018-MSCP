@@ -7,7 +7,7 @@
     tools:context=".ui.home.HomeFragment"
     android:orientation="vertical"
     android:id="@+id/coordinatorLayout"
-    android:background="#F3f3F3"
+    android:background="@drawable/background"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="0dp">
@@ -27,7 +27,6 @@
         android:background = "@drawable/round_button"
         android:text="Delete"
         android:layout_gravity="bottom|center_horizontal"
-        android:paddingLeft="10dp"
         android:layout_marginBottom="70dp"
         />
     <Button
@@ -44,7 +43,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="110dp"
-        android:background="#F3F3F3"
         android:clipToPadding="false"
         android:paddingBottom="0dp"
         android:paddingTop="0dp"/>

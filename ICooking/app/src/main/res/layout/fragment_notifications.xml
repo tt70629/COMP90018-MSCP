@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textSize="15sp"
-            android:layout_below="@id/current_inventory"/>
+            android:layout_below="@id/btn_search"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/searched_recipe"
@@ -46,13 +46,13 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="15dp"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/searched_recipe"/>
+            android:layout_below="@id/current_inventory"/>
 
         <CheckBox
             android:id="@+id/rough_search_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btn_search"
+            android:layout_below="@id/searched_recipe"
             android:layout_centerHorizontal="true"
             android:text="rough search" />
 

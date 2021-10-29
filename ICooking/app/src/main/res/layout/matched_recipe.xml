@@ -9,8 +9,8 @@
     <LinearLayout
 
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@android:color/white"
+        android:layout_height="140dp"
+        android:background="@drawable/round_box"
 
         android:elevation="4dp"
         android:focusable="true"
@@ -56,14 +56,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/matched_recipe_images"
                 app:layout_constraintTop_toBottomOf="@+id/matched_recipe_names" />
-
-
-
+            
             <ImageView
                 android:id="@+id/matched_recipe_images"
-                android:layout_width="80dp"
-                android:layout_height="0dp"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:scaleType="centerCrop"
                 android:layout_gravity="center"
+                android:layout_margin="15dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

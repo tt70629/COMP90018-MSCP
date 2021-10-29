@@ -3,7 +3,9 @@ package com.example.icooking.ui.notifications;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +50,7 @@ public class DisplayInventoryAdaptor extends RecyclerView.Adapter<DisplayInvento
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.ingredientName.setText(inventoryList.get(position).getIngredientName());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,12 +58,14 @@ public class DisplayInventoryAdaptor extends RecyclerView.Adapter<DisplayInvento
                 if (!inventoryList.get(position).isSelected()) {
                     inventoryList.get(position).setSelected(true);
                     //view.setBackgroundColor(Color.GREEN);
+                    holder.ingredientName.setTextColor(Color.WHITE);
                     view.setBackgroundResource(R.drawable.selected_round);
                     selected_ingredients.add(inventoryList.get(position));
 
                 } else {
                     inventoryList.get(position).setSelected(false);
                     //view.setBackgroundColor(Color.WHITE);
+                    holder.ingredientName.setTextColor(Color.GRAY);
                     view.setBackgroundResource(R.drawable.round_edittext);
                     selected_ingredients.remove(inventoryList.get(position));
                 }

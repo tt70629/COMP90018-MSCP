@@ -77,7 +77,7 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
         /*
          * Set up addButton to trigger BottomSheetDialog for adding new ingredient
          */
-        final FloatingActionButton addInventoryBtn = binding.addInventory;
+        final Button addInventoryBtn = binding.addInventory;
         addInventoryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

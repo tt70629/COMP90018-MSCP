@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="70dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="#F3F3F3">
+    android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/lowerview"
@@ -15,7 +14,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@android:color/white"
+            android:background="@drawable/round_box"
             android:clickable="true"
             android:elevation="4dp"
             android:focusable="true"
@@ -30,6 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
+                    android:buttonTint="@color/yellow"
                     android:clickable="true"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
