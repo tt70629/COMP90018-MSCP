@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.Inventory.DashboardFragment"
+    android:background="@drawable/background_2"
     android:orientation="vertical"
     android:id="@+id/coordinatorLayout"
     android:paddingLeft="16dp"
@@ -20,9 +21,11 @@
         android:id="@+id/recview_Inventory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbars="vertical"
         android:clipToPadding="false"
         android:paddingBottom="72dp"
-        android:layout_marginBottom="50dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="120dp"/>
 
 <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
 <!--        android:id="@+id/add_Inventory"-->
