@@ -164,11 +164,11 @@ public class MatchRecipeFragment extends Fragment {
                 float x=ary[0];
                 float y=ary[1];
                 float z=ary[2];
-                float f=10;
+                float f=18;
                 long temp_current_time = System.currentTimeMillis();
-                if(Math.abs(x)>f||Math.abs(y)>f||Math.abs(z)>f){
+                if(0.8*Math.abs(x) + 1.4*Math.abs(y) + 0.8*Math.abs(z)>f||1.4*Math.abs(x) + 0.8*Math.abs(y) + 0.8*Math.abs(z)>f){
                     //System.out.println("!!!");
-                    //vibrator.vibrate(1000);
+                    //vibrator.vibrate(400);
                     if(temp_current_time > last_time + 1000){
                         search_counter = 0;
                     }
@@ -180,6 +180,7 @@ public class MatchRecipeFragment extends Fragment {
                     }
                 }
                 if (search_counter > 2){
+                    vibrator.vibrate(400);
                     ready_to_search = true;
                     System.out.println("This is ready!!!!!" + ready_to_search);
                     /*if (invAdaptor.selected_ingredients.isEmpty()){
