@@ -4,18 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Inventory.DashboardFragment"
-    android:background="@drawable/background_2"
+    tools:context=".ui.Inventory.InventoryFragment"
     android:orientation="vertical"
     android:id="@+id/coordinatorLayout"
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
-    <ProgressBar
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_gravity="center"
-        android:visibility="invisible"
-        android:id="@+id/progressBar"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recview_Inventory"

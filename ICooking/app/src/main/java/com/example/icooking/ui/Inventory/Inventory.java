@@ -10,7 +10,6 @@ public class Inventory implements Serializable,Comparable<Inventory> {
 
     private String expiryDate;
     private boolean selected;
-    private String dayLeft;
     @Exclude
     private String ingredientName;
     @Exclude
@@ -50,7 +49,7 @@ public class Inventory implements Serializable,Comparable<Inventory> {
         this.selected = selected;
     }
 
-    //
+    // In order to sort inventory by expiry date.
     @Override
     public int compareTo(Inventory inventory) {
         int target=Integer.parseInt(InventoryAdaptor.getDayLeft(this.getExpiryDate()));

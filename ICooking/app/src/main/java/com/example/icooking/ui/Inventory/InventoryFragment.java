@@ -8,22 +8,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.icooking.R;
 import com.example.icooking.databinding.FragmentDashboardBinding;
-
 import com.example.icooking.helper.RecyclerTouchListener;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -32,29 +27,27 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class DashboardFragment extends Fragment implements InventoryAdaptor.OnItemClickHandler {
+public class InventoryFragment extends Fragment implements InventoryAdaptor.OnItemClickHandler {
 
-    private DashboardViewModel dashboardViewModel;
+    // private DashboardViewModel dashboardViewModel;
     private FragmentDashboardBinding binding;
     private InventoryAdaptor adaptor;
     private BottomSheetDialog bottomSheetDialog;
-    private DAOInventory daoInventory; //Data Access Object
+    private DAOInventory daoInventory;
     private String key = null;
     static final long DEFAULT_DURATION = 10;
-    static final int SORT_BY_DURATION=1;
-    static final int SORT_BY_KEY=0;
+    static final int LEN_NAME = 12;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         /*
          * Set up view model, might be redundant...
-         */
-        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+         *
+        // dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
         /*
          * Use data binding method...
@@ -66,11 +59,12 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
          * Set up RecyclerView then render data accessing from DAO
          */
         final RecyclerView recviewInventory = binding.recviewInventory;
-        adaptor = new InventoryAdaptor(this);
+        adaptor = new InventoryAdaptor(this, getContext());
         recviewInventory.setAdapter(adaptor);
         recviewInventory.setLayoutManager(new LinearLayoutManager(getContext()));
         daoInventory = new DAOInventory();
         fetchInventoryData();
+
 
 
 
@@ -86,13 +80,13 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
                 bottomSheetDialog.setContentView(R.layout.botton_sheet_dialog);
                 bottomSheetDialog.setCanceledOnTouchOutside(false);
                 bottomSheetDialog.setDismissWithAnimation(true);
-
+                TextView name_text = bottomSheetDialog.findViewById(R.id.test_ingredient);
                 TextView expiryDate_text = bottomSheetDialog.findViewById(R.id.expiryDate_text);
                 EditText etName = bottomSheetDialog.findViewById(R.id.et_ingredientName);
                 DatePicker datePicker = bottomSheetDialog.findViewById(R.id.expiryDate);
+                name_text.setVisibility(View.GONE);
                 datePicker.setVisibility(View.GONE);
                 expiryDate_text.setVisibility(View.GONE);
-                //EditText etDay= bottomSheetDialog.findViewById(R.id.et_leftDay);
                 Button btnSubmit = bottomSheetDialog.findViewById(R.id.btn_submit);
                 assert btnSubmit != null;
                 btnSubmit.setOnClickListener(new View.OnClickListener() {
@@ -100,9 +94,11 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
                     public void onClick(View view) {
                         assert etName != null;
                         if (!validateIngredientName(etName)) {
-                            return;}
-                        if (!adaptor.doesInventoryNameExist(etName.getText().toString())) {
-                            daoInventory.add(new Inventory(etName.getText().toString(), getDefaultDateString()))
+                            return;
+                        }
+                        String trim_etName = etName.getText().toString().trim();
+                        if (!adaptor.doesInventoryNameExist(trim_etName)) {
+                            daoInventory.add(new Inventory(trim_etName, getDefaultDateString()))
                                     .addOnSuccessListener(success -> {
                                         Toast.makeText(getContext(), "Add ingredient successfully", Toast.LENGTH_SHORT).show();
                                         bottomSheetDialog.dismiss();
@@ -110,16 +106,18 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
                                 Toast.makeText(getContext(), err.getMessage(), Toast.LENGTH_SHORT).show();
                             });
                         } else {
-                            Toast.makeText(getContext(), "Bro, the ingredient has already listed in your inventory", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "The ingredient has already listed in your inventory", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
                 bottomSheetDialog.show();
             }
         });
+
         /*
          * use RecyclerTouchListener to realize operations like deleting and editing after swiping.
          */
+
         RecyclerTouchListener touchListener = new RecyclerTouchListener(getActivity(), recviewInventory);
         touchListener
                 .setClickable(new RecyclerTouchListener.OnRowClickListener() {
@@ -158,7 +156,7 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
                             String[] date_arr = expiry_date.split("-");
                             datePicker.updateDate(
                                     Integer.parseInt(date_arr[0]),
-                                    Integer.parseInt(date_arr[1])-1,
+                                    Integer.parseInt(date_arr[1]) - 1,
                                     Integer.parseInt(date_arr[2]));
                             //etDay.setText(editInventory.getDayLeft());
                             Button btnSubmit = bottomSheetDialog.findViewById(R.id.btn_submit);
@@ -167,20 +165,24 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
                             btnSubmit.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
+                                    if (!validateIngredientName(etName)) {
+                                        return;
+                                    }
                                     //Inventory newInventory=new Inventory(etName.getText().toString(),etDay.getText().toString());
                                     HashMap<String, Object> hashMapInventory = new HashMap<>();
-                                    hashMapInventory.put("ingredientName", etName.getText().toString());
+                                    hashMapInventory.put("ingredientName", etName.getText().toString().trim());
                                     hashMapInventory.put("expiryDate", getDateStringDP(datePicker));
                                     assert etName != null;
-                                    //assert etDay != null;
-                                    daoInventory.update(editInventory.getKey(), hashMapInventory)
-                                            .addOnSuccessListener(success -> {
-                                                Toast.makeText(getContext(), "Update ingredient successfully", Toast.LENGTH_SHORT).show();
-                                                bottomSheetDialog.dismiss();
-                                            }).addOnFailureListener(err -> {
-                                        Toast.makeText(getContext(), err.getMessage(), Toast.LENGTH_SHORT).show();
-                                    });
-                                }
+
+                                        daoInventory.update(editInventory.getKey(), hashMapInventory)
+                                                .addOnSuccessListener(success -> {
+                                                    Toast.makeText(getContext(), "Update ingredient successfully", Toast.LENGTH_SHORT).show();
+                                                    bottomSheetDialog.dismiss();
+                                                }).addOnFailureListener(err -> {
+                                            Toast.makeText(getContext(), err.getMessage(), Toast.LENGTH_SHORT).show();
+                                        });
+                                    }
+
                             });
                             bottomSheetDialog.show();
                             break;
@@ -201,28 +203,27 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
                     ArrayList<Inventory> inventoryList = new ArrayList<>();
-                    final ProgressBar pgsBar=binding.progressBar;
-                    pgsBar.setVisibility(View.VISIBLE);
+                    Log.d("DS_STATUS", "Fetching start");
                     for (DataSnapshot data : snapshot.getChildren()) {
                         Inventory inventory = data.getValue(Inventory.class);
                         inventory.setKey(data.getKey());
                         inventoryList.add(inventory);
                     }
-                    pgsBar.setVisibility(View.GONE);
+                    Log.d("DS_STATUS", "Fetching complete");
                     Collections.sort(inventoryList);
                     adaptor.setInventory(inventoryList);
                     adaptor.notifyDataSetChanged();
-                }catch(Exception e){
-                    Log.d("DS_STATUS",e.toString());
+                } catch (Exception e) {
+                    Log.d("DS_STATUS_ERROR", e.toString());
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                final ProgressBar pgsBar=binding.progressBar;
-                pgsBar.setVisibility(View.VISIBLE);
-                Toast.makeText(getContext(),"Permission denied",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
             }
         });
+
 
     }
 
@@ -236,14 +237,19 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
      * Methods that are implemented from InventoryAdaptor.OnItemClickHandler, however these methods
      * were used in interacting with pseudo data that is no longer in use.
      */
+
     @Override
     public void show(Inventory inv) {
     }
 
-    public boolean validateIngredientName(EditText name) {
+    public static boolean validateIngredientName(EditText name) {
         String val = name.getText().toString();
         if (val.isEmpty()) {
             name.setError("This field should not be empty");
+            return false;
+        }
+        if (val.length() > LEN_NAME) {
+            name.setError("The length of ingredient name should be less than " + LEN_NAME + " digitals");
             return false;
         }
         return true;
@@ -257,15 +263,10 @@ public class DashboardFragment extends Fragment implements InventoryAdaptor.OnIt
         String date = year + "-" + (month < 10 ? "0" + month : month) + "-" + (day < 10 ? "0" + day : day);
         return date;
     }
-
     public static String getDefaultDateString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime defaultExpiryDate = LocalDateTime.now().plusDays(DEFAULT_DURATION);
         String expiryDate = defaultExpiryDate.format(formatter);
         return expiryDate;
     }
-
-    ;
-
-
 }
