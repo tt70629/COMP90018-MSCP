@@ -23,8 +23,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 public class SearchedRecipeAdaptor extends RecyclerView.Adapter<SearchedRecipeAdaptor.ViewHolder>{
-    ArrayList<Inventory> selected_ingredients = new ArrayList<>();
-    ArrayList<RecipeContent> all_recipes = new ArrayList<>();
     ArrayList<RecipeContent> matched_recipes = new ArrayList<>();
     private Context mcontext;
 

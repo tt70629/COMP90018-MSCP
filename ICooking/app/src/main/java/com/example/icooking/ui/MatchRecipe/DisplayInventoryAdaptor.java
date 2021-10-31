@@ -23,8 +23,6 @@ public class DisplayInventoryAdaptor extends RecyclerView.Adapter<DisplayInvento
     ArrayList<Inventory> inventoryList = new ArrayList<>();
     ArrayList<Inventory> selected_ingredients = new ArrayList<>();
 
-    private Context mcontext;
-
     public DisplayInventoryAdaptor() {
 
     }

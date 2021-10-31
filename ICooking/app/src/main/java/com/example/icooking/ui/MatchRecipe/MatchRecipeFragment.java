@@ -55,12 +55,8 @@ public class MatchRecipeFragment extends Fragment {
     private DisplayInventoryAdaptor invAdaptor;
     private SearchedRecipeAdaptor recAdaptor;
     private ArrayList<Inventory> inventory = new ArrayList<>();
-    private ArrayList<Inventory> selected_inv;
-    private RecipeAdaptorIngredients adaptorIngred;
     private TextView cookbook_title;
     private TextView matched_recipe_title;
-    private static final String TAG = "Here is the tag:";
-    private Context bcontext;
     private boolean selection_changed = false;
     private boolean run_out_choice = false;
     private boolean rough_search = false;
@@ -100,19 +96,20 @@ public class MatchRecipeFragment extends Fragment {
 
         //Set title
         cookbook_title = binding.titleCookbook;
-        //cookbook_title.setText("Choose ingredient you from your inventory: ");
 
         matched_recipe_title = binding.matchedRecipeTitle;
-        //matched_recipe_title.setText("");
 
         images = new HashMap<String,String>();
         //Set options from inventory
         final RecyclerView currentInventory= binding.currentInventory;
         invAdaptor= new DisplayInventoryAdaptor();
         currentInventory.setAdapter(invAdaptor);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager layoutManager =
+                new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
 
         HashMap<String, Integer> stringIntegerHashMap = new HashMap<>();
+
+        //set the paddings
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.TOP_DECORATION,10);
 
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.BOTTOM_DECORATION,10);
@@ -123,6 +120,7 @@ public class MatchRecipeFragment extends Fragment {
         currentInventory.addItemDecoration(new RecyclerViewSpacesItemDecoration(stringIntegerHashMap));
         currentInventory.setLayoutManager(layoutManager);
         daoInventory = new DAOInventory();
+        //initialize the ingredients
         fetchInventoryData();
 
 
@@ -132,9 +130,10 @@ public class MatchRecipeFragment extends Fragment {
         searchedRecipe.setLayoutManager(new LinearLayoutManager(getContext()));
         daoRecipe = new DAORecipe();
 
+        // Initialize the page if it's first time visited
         initialFetchRecipeData();
 
-
+        //set the search button
         final Button button = binding.btnSearch;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,8 +142,9 @@ public class MatchRecipeFragment extends Fragment {
             }
         });
 
+        //rough search
         CheckBox ck_rough_search = binding.roughSearchCheckbox;
-        //ck_rough_search.setChecked(true);
+
         ck_rough_search.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -154,6 +154,7 @@ public class MatchRecipeFragment extends Fragment {
         });
         ck_rough_search.setChecked(true);
 
+        //Set the shaker sensor manager
         manager=(SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         vibrator=(Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
         sensors=manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -166,28 +167,19 @@ public class MatchRecipeFragment extends Fragment {
                 float z=ary[2];
                 float f=18;
                 long temp_current_time = System.currentTimeMillis();
-                if(0.8*Math.abs(x) + 1.4*Math.abs(y) + 0.8*Math.abs(z)>f||1.4*Math.abs(x) + 0.8*Math.abs(y) + 0.8*Math.abs(z)>f){
-                    //System.out.println("!!!");
-                    //vibrator.vibrate(400);
+                if(0.8*Math.abs(x) + 1.4*Math.abs(y) + 0.8*Math.abs(z)>f
+                        ||1.4*Math.abs(x) + 0.8*Math.abs(y) + 0.8*Math.abs(z)>f){
                     if(temp_current_time > last_time + 1000){
                         search_counter = 0;
                     }
                     if(temp_current_time > last_time + 300){
                         last_time = temp_current_time;
-                        //System.out.println("This is current:" + current_time);
-                        System.out.println("This is temp:" + last_time);
                         search_counter += 1;
                     }
                 }
                 if (search_counter > 2){
                     vibrator.vibrate(400);
                     ready_to_search = true;
-                    System.out.println("This is ready!!!!!" + ready_to_search);
-                    /*if (invAdaptor.selected_ingredients.isEmpty()){
-                        Toast.makeText(getContext(),"Please select at least one ingredient!",Toast.LENGTH_SHORT).show();
-                    } else {
-                        selected_ingredients = invAdaptor.selected_ingredients;
-                    }*/
                     clickShake();
                     ready_to_search = false;
                     search_counter = 0;
@@ -201,15 +193,15 @@ public class MatchRecipeFragment extends Fragment {
 
         manager.registerListener(listener, sensors, sensor_rate);
 
-
         return root;
     }
-
+    // Destroy the listener
     public void onDestroy() {
         super.onDestroy();
         manager.unregisterListener(listener);
     }
 
+    //set onClick algorithm
     private void clickShake() {
         initial_rec = false;
         if (invAdaptor.selected_ingredients.isEmpty()){
@@ -225,8 +217,6 @@ public class MatchRecipeFragment extends Fragment {
                     for(int j=0; j<selected_ingredients.size();j++){
                         if (last_selected.get(i).getIngredientName().equals(selected_ingredients.get(j).getIngredientName())){
                             counter += 1;
-                        } else {
-
                         }
                     }
                 }
@@ -382,10 +372,7 @@ public class MatchRecipeFragment extends Fragment {
                         matched_recipe_title.setText("We matched some recipes based on your close-to-expiry ingredients: ");
                     }
                     smart_match = true;
-                    //System.out.println(recipeContentList.size()+"and"+prior_ingredients.size());
                 }
-
-                //recAdaptor.setRecipeContent(add_list);
                 recAdaptor.notifyDataSetChanged();
 
             }
@@ -402,7 +389,6 @@ public class MatchRecipeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<RecipeContent> recipeContentList = new ArrayList<>();
-                ArrayList<RecipeContent> matched_recipes = new ArrayList<>();
                 int matched_number = 0;
                 Random rd = new Random();
                 if(selection_changed) {
