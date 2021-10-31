@@ -3,4 +3,6 @@
     <string name="title_home">Checklist</string>
     <string name="title_Inventory">Ingredients</string>
     <string name="title_notifications">Recipe</string>
+    <string name="channel_name">default_channel</string>
+    <string name="channel_description">this is a default channel</string>
 </resources>

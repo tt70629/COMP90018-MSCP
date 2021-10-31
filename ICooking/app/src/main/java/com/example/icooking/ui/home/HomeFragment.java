@@ -19,7 +19,7 @@ import com.example.icooking.R;
 import com.example.icooking.databinding.FragmentHomeBinding;
 import com.example.icooking.helper.RecyclerTouchListener;
 import com.example.icooking.ui.Inventory.DAOInventory;
-import com.example.icooking.ui.Inventory.DashboardFragment;
+import com.example.icooking.ui.Inventory.InventoryFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -93,7 +93,8 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
                         //给一个假设日期先
                         String etName = buylist.get(i).getBuyName();
                         // use static method from inventoryframent.
-                        daoInventory.add(new Inventory(etName, DashboardFragment.getDefaultDateString()))
+
+                        daoInventory.add(new Inventory(etName, InventoryFragment.getDefaultDateString()))
                                 .addOnSuccessListener(success -> {
                                     Toast.makeText(getContext(), "Add ingredient successfully", Toast.LENGTH_SHORT).show();
 
@@ -172,12 +173,14 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
                     public void onClick(View view) {
 
                         assert editName != null;
+                        if (!InventoryFragment.validateIngredientName(editName)) {
+                            return;}
                         //buylist.add(new Buylist(editName.getText().toString()));
                         buyadaptor.notifyDataSetChanged();
 
                         daoBuylist.add(new Buylist(editName.getText().toString()))
                                 .addOnSuccessListener(success -> {
-                                    Toast.makeText(getContext(),"Add BUY successfully",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(),"Add ingredient successfully",Toast.LENGTH_SHORT).show();
                                     bottomSheetDialogs.dismiss();
                                 }).addOnFailureListener(err->{
                             Toast.makeText(getContext(),err.getMessage(),Toast.LENGTH_SHORT).show();

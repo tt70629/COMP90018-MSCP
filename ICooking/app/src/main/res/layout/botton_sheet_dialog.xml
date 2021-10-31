@@ -8,8 +8,9 @@
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="Select the ingredient"
+        android:text="Modify ingredient name"
         android:textColor="@color/black"
+        android:id="@+id/test_ingredient"
         android:textSize="18dp" />
     <EditText
         android:id="@+id/et_ingredientName"
@@ -18,12 +19,12 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/round_edittext"
-        android:hint="Enter Ingredient Name"
+        android:hint="Enter ingredient name"
         android:padding="10dp" />
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="Select the expiry date"
+        android:text="Change the expiry date"
         android:textColor="@color/black"
         android:textSize="18dp"
         android:id="@+id/expiryDate_text"/>
