@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.Inventory.InventoryFragment"
     android:orientation="vertical"
+    android:background="@drawable/background_2"
     android:id="@+id/coordinatorLayout"
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
