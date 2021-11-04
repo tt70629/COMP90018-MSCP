@@ -1,4 +1,4 @@
-package com.example.icooking.ui.home;
+package com.example.icooking.ui.buylist;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,12 +28,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickListener {
+public class BuylistFragment extends Fragment implements BuylistAdaptor.OnItemClickListener {
 
-    private HomeViewModel homeViewModel;
     private View view;
     private FragmentHomeBinding binding;
-    private HomeAdaptor buyadaptor;
+    private BuylistAdaptor buyadaptor;
     private ArrayList<Buylist> buylist = new ArrayList<Buylist>();
     private DAObuylist daoBuylist;
 
@@ -47,10 +45,6 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
-
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -169,7 +163,7 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
         //create ADAPTER
         buyadaptor = new
 
-                HomeAdaptor(this, buylist);
+                BuylistAdaptor(this, buylist);
         //set recyclerview for adapter
         mRvbuy.setAdapter(buyadaptor);
         //set layoutmanager

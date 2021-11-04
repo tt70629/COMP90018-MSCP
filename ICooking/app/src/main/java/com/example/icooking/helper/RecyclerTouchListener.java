@@ -23,7 +23,8 @@ import java.util.List;
 import java.util.Set;
 
 /*
- *@author velmurugan-murugesan
+ *@author: velmurugan-murugesan
+ *@URL:https://github.com/velmurugan-murugesan
  */
 
 public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener, OnActivityTouchListener {

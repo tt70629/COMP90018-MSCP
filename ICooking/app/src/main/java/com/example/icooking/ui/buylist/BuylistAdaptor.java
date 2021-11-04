@@ -1,4 +1,4 @@
-package com.example.icooking.ui.home;
+package com.example.icooking.ui.buylist;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class HomeAdaptor extends RecyclerView.Adapter<HomeAdaptor.myViewHolder> {
+public class BuylistAdaptor extends RecyclerView.Adapter<BuylistAdaptor.myViewHolder> {
     @NonNull
     @NotNull
     ArrayList<Inventory> inventoryList = new ArrayList<>();
@@ -26,7 +26,7 @@ public class HomeAdaptor extends RecyclerView.Adapter<HomeAdaptor.myViewHolder> 
     OnItemClickListener bonItemClickListener;
 
 
-    public HomeAdaptor(OnItemClickListener onItemClickListener, ArrayList<Buylist> buylist) {
+    public BuylistAdaptor(OnItemClickListener onItemClickListener, ArrayList<Buylist> buylist) {
         this.buylist = buylist;
         this.bonItemClickListener = onItemClickListener;
 

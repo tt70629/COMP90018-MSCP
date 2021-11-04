@@ -1,8 +1,6 @@
-package com.example.icooking.ui.home;
+package com.example.icooking.ui.buylist;
 
 import com.google.firebase.database.Exclude;
-
-import java.util.ArrayList;
 
 public class Buylist {
 

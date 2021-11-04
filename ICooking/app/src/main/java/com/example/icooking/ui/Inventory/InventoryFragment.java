@@ -45,11 +45,6 @@ public class InventoryFragment extends Fragment implements InventoryAdaptor.OnIt
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         /*
-         * Set up view model, might be redundant...
-         *
-        // dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-
-        /*
          * Use data binding method...
          */
         binding = FragmentDashboardBinding.inflate(inflater, container, false);

@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.icooking.ui.Inventory.Inventory;
 import com.example.icooking.R;
 import com.example.icooking.ui.Inventory.DAOInventory;
-import com.example.icooking.ui.home.Buylist;
-import com.example.icooking.ui.home.DAObuylist;
+import com.example.icooking.ui.buylist.Buylist;
+import com.example.icooking.ui.buylist.DAObuylist;
 
 import java.util.ArrayList;
 import java.util.HashMap;
