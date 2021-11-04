@@ -100,7 +100,7 @@ public class MatchRecipeFragment extends Fragment {
         matched_recipe_title = binding.matchedRecipeTitle;
 
         images = new HashMap<String,String>();
-        //Set options from inventory
+        //Set recyclerview
         final RecyclerView currentInventory= binding.currentInventory;
         invAdaptor= new DisplayInventoryAdaptor();
         currentInventory.setAdapter(invAdaptor);
@@ -110,16 +110,19 @@ public class MatchRecipeFragment extends Fragment {
         HashMap<String, Integer> stringIntegerHashMap = new HashMap<>();
 
         //set the paddings
-        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.TOP_DECORATION,10);
+        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.TOP_DECORATION, 10);
 
-        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.BOTTOM_DECORATION,10);
+        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.BOTTOM_DECORATION, 10);
 
-        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.LEFT_DECORATION,20);
+        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.LEFT_DECORATION, 20);
 
-        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.RIGHT_DECORATION,20);
+        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.RIGHT_DECORATION, 20);
         currentInventory.addItemDecoration(new RecyclerViewSpacesItemDecoration(stringIntegerHashMap));
         currentInventory.setLayoutManager(layoutManager);
+
+        //set DAO
         daoInventory = new DAOInventory();
+
         //initialize the ingredients
         fetchInventoryData();
 
@@ -138,6 +141,7 @@ public class MatchRecipeFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Set click function
                 clickShake();
             }
         });
@@ -159,24 +163,32 @@ public class MatchRecipeFragment extends Fragment {
         vibrator=(Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
         sensors=manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensor_rate=SensorManager.SENSOR_DELAY_NORMAL;
+        //Set listener
         listener=new SensorEventListener() {
             public void onSensorChanged(SensorEvent event) {
                 float[] ary=event.values;
                 float x=ary[0];
                 float y=ary[1];
                 float z=ary[2];
+                //set a value to awake the shaker
                 float f=18;
+                //record the time for calculating intervals
                 long temp_current_time = System.currentTimeMillis();
+                //set the algorithm that fits human's two habits of shaking the smartphone
+                //(based on x-axis and based on y-axis)
                 if(0.8*Math.abs(x) + 1.4*Math.abs(y) + 0.8*Math.abs(z)>f
                         ||1.4*Math.abs(x) + 0.8*Math.abs(y) + 0.8*Math.abs(z)>f){
+                    //if the interval is too long, reset the counter
                     if(temp_current_time > last_time + 1000){
                         search_counter = 0;
                     }
+                    //the interval is 300ms. if the phone is still shaking after 300ms, counter+1
                     if(temp_current_time > last_time + 300){
                         last_time = temp_current_time;
                         search_counter += 1;
                     }
                 }
+                //when counter == 3, reset counter and run the clickShake function
                 if (search_counter > 2){
                     vibrator.vibrate(400);
                     ready_to_search = true;
@@ -201,11 +213,15 @@ public class MatchRecipeFragment extends Fragment {
         manager.unregisterListener(listener);
     }
 
-    //set onClick algorithm
+    /**
+     * Run the search algorithm if users click the button or shake the phone
+     */
+
     private void clickShake() {
         initial_rec = false;
         if (invAdaptor.selected_ingredients.isEmpty()){
-            Toast.makeText(getContext(),"Please select at least one ingredient!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"Please select at least one ingredient!",
+                    Toast.LENGTH_SHORT).show();
         } else {
             selected_ingredients=invAdaptor.selected_ingredients;
             if(last_selected.isEmpty()){
@@ -215,7 +231,8 @@ public class MatchRecipeFragment extends Fragment {
                 int counter = 0;
                 for(int i = 0;i<last_selected.size();i++){
                     for(int j=0; j<selected_ingredients.size();j++){
-                        if (last_selected.get(i).getIngredientName().equals(selected_ingredients.get(j).getIngredientName())){
+                        if (last_selected.get(i).getIngredientName().
+                                equals(selected_ingredients.get(j).getIngredientName())){
                             counter += 1;
                         }
                     }
@@ -241,6 +258,9 @@ public class MatchRecipeFragment extends Fragment {
         }
     }
 
+    /**
+     * display the ingredients fetched from the database
+     */
     private void fetchInventoryData() {
 
         daoInventory.get(key).addValueEventListener(new ValueEventListener() {
@@ -256,7 +276,8 @@ public class MatchRecipeFragment extends Fragment {
                 }
 
                 for(int i=0;i<inventoryList.size();i++){
-                    if(Integer.parseInt(InventoryAdaptor.getDayLeft(inventoryList.get(i).getExpiryDate())) <=0){
+                    if(Integer.parseInt(InventoryAdaptor.
+                            getDayLeft(inventoryList.get(i).getExpiryDate())) <=0){
                         inventoryList.remove(i);
                     }
                 }
@@ -269,13 +290,19 @@ public class MatchRecipeFragment extends Fragment {
                 if(inventoryList.isEmpty()){
                     no_ingredients = true;
                 } else {
+                    // sort the ingredients by expiry days
                     while (local_inventoryList.size() > 0) {
-                        int min = 10000;
+                        int min_expiry_days = 10000;
                         Inventory temp_inventory = new Inventory();
                         for (int i = 0; i < local_inventoryList.size(); i++) {
-                            if (Integer.parseInt(InventoryAdaptor.getDayLeft(local_inventoryList.get(i).getExpiryDate())) < min) {
+                            if (Integer.parseInt(InventoryAdaptor.
+                                    getDayLeft(local_inventoryList.get(i).getExpiryDate()))
+                                    < min_expiry_days) {
+
                                 temp_inventory = local_inventoryList.get(i);
-                                min = Integer.parseInt(InventoryAdaptor.getDayLeft(local_inventoryList.get(i).getExpiryDate()));
+
+                                min_expiry_days = Integer.parseInt(InventoryAdaptor.
+                                        getDayLeft(local_inventoryList.get(i).getExpiryDate()));
                             }
                         }
                         prior_ingredients.add(temp_inventory);
@@ -300,6 +327,10 @@ public class MatchRecipeFragment extends Fragment {
         });
     }
 
+    /**
+     * Set the recipes that should be displayed when user first time get into this fragment
+     * (or after swap pages)
+     */
     private void initialFetchRecipeData(){
         daoRecipe.get(key).addValueEventListener(new ValueEventListener() {
             @Override
@@ -318,7 +349,8 @@ public class MatchRecipeFragment extends Fragment {
 
                         for (int i = 0; i < prior_ingredients.size(); i++) {
                             for (int j = 0; j < recipeContent.getIngredients().size(); j++) {
-                                if (prior_ingredients.get(i).getIngredientName().equals(recipeContent.getIngredients().get(j))) {
+                                if (prior_ingredients.get(i).getIngredientName().
+                                        equals(recipeContent.getIngredients().get(j))) {
                                     matched_number += 1;
                                 }
 
@@ -344,8 +376,8 @@ public class MatchRecipeFragment extends Fragment {
                 if(prior_ingredients.isEmpty() || recipeContentList.isEmpty()){
                     if(initial_rec) {
                         if (recipeContentList.isEmpty() && !prior_ingredients.isEmpty()) {
-                            matched_recipe_title.setText("No recipes matches with your close-to-expiry ingredients. " +
-                                    "We guess you would like: ");
+                            matched_recipe_title.setText("No recipes matches with your " +
+                                    "close-to-expiry ingredients. " + "We guess you would like: ");
                         }
                         if (recipeContentList.isEmpty() && prior_ingredients.isEmpty()) {
                             matched_recipe_title.setText("We guess you would like: ");
@@ -369,7 +401,8 @@ public class MatchRecipeFragment extends Fragment {
                     }
                 } else {
                     if(initial_rec) {
-                        matched_recipe_title.setText("We matched some recipes based on your close-to-expiry ingredients: ");
+                        matched_recipe_title.setText("We matched some recipes based on " +
+                                "your close-to-expiry ingredients: ");
                     }
                     smart_match = true;
                 }
@@ -383,6 +416,10 @@ public class MatchRecipeFragment extends Fragment {
         });
     }
 
+    /**
+     * Set the recipes that should be displayed on the pages once the user
+     * clicks the search button or shakes the phone.
+     */
     private void fetchRecipeData() {
 
         daoRecipe.get(key).addValueEventListener(new ValueEventListener() {
@@ -391,13 +428,15 @@ public class MatchRecipeFragment extends Fragment {
                 ArrayList<RecipeContent> recipeContentList = new ArrayList<>();
                 int matched_number = 0;
                 Random rd = new Random();
+                //If selection has been changed, fetch the data from database again.
                 if(selection_changed) {
                     for (DataSnapshot data : snapshot.getChildren()) {
                         RecipeContent recipeContent = data.getValue(RecipeContent.class);
                         recipeContent.setKey(data.getKey());
                         for (int i = 0; i < selected_ingredients.size(); i++) {
                             for (int j = 0; j < recipeContent.getIngredients().size(); j++) {
-                                if (selected_ingredients.get(i).getIngredientName().equals(recipeContent.getIngredients().get(j))) {
+                                if (selected_ingredients.get(i).getIngredientName().
+                                        equals(recipeContent.getIngredients().get(j))) {
                                     matched_number += 1;
                                 }
 
@@ -428,12 +467,14 @@ public class MatchRecipeFragment extends Fragment {
                         if (smart_match){
                             System.out.println("smart!");
                             matched_recipe_title.setText(" ");
-                            matched_recipe_title.setText("No recipe matched with the selected ingredients. " +
-                                    "We recommend these recipes based on your close-to-expiry ingredients: ");
+                            matched_recipe_title.setText("No recipe matched with the selected" +
+                                    " ingredients. " + "We recommend these recipes based on your " +
+                                    "close-to-expiry ingredients: ");
                         } else {
                             System.out.println("stupid");
                             matched_recipe_title.setText(" ");
-                            matched_recipe_title.setText("No recipe matched with the selected ingredients and close-to-expiry ingredients." +
+                            matched_recipe_title.setText("No recipe matched with the selected " +
+                                    "ingredients and close-to-expiry ingredients." +
                                     " We guess you would like: ");
                         }
                     } else if(local_recipe_content.size() > 0 && local_recipe_content.size() <= 3) {
@@ -441,7 +482,8 @@ public class MatchRecipeFragment extends Fragment {
                         matched_recipe_title.setText("Here are some matched recipes: ");
                         recAdaptor.setRecipeContent(local_recipe_content);
                         run_out_choice = true;
-                        Toast.makeText(getContext(),"There are no more recommendations for the ingredients!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),"There are no more recommendations for" +
+                                " the ingredients!",Toast.LENGTH_SHORT).show();
                     } else if(local_recipe_content.size() > 3){
                         matched_recipe_title.setText(" ");
                         matched_recipe_title.setText("Here are some matched recipes: ");
@@ -456,7 +498,9 @@ public class MatchRecipeFragment extends Fragment {
                         }
                         recAdaptor.setRecipeContent(displayed_recipe_content);
                     }
-
+                    //if selection is not changed, fetch the data from local recipe list
+                    //the local recipe list has removed the previous three recipes that has been
+                    //displayed.
                 } else {
                     if(local_recipe_content.size() == 0){
                         System.out.println("dont have any");
@@ -464,12 +508,14 @@ public class MatchRecipeFragment extends Fragment {
                         if (smart_match){
                             System.out.println("smart!");
                             matched_recipe_title.setText(" ");
-                            matched_recipe_title.setText("No recipe matched with the selected ingredients. " +
-                                    "We recommend these recipes based on your close-to-expiry ingredients.");
+                            matched_recipe_title.setText("No recipe matched with the selected " +
+                                    "ingredients. " + "We recommend these recipes based on " +
+                                    "your close-to-expiry ingredients.");
                         } else {
                             System.out.println("stupid");
                             matched_recipe_title.setText(" ");
-                            matched_recipe_title.setText("No recipe matched with the selected ingredients and close-to-expiry ingredients." +
+                            matched_recipe_title.setText("No recipe matched with the selected" +
+                                    " ingredients and close-to-expiry ingredients." +
                                     " We guess you would like: ");
                         }
 
@@ -478,7 +524,8 @@ public class MatchRecipeFragment extends Fragment {
                         matched_recipe_title.setText("Here are some matched recipes: ");
                         recAdaptor.setRecipeContent(local_recipe_content);
                         run_out_choice = true;
-                        Toast.makeText(getContext(),"There are no more recommendations for the ingredients!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),"There are no more recommendations" +
+                                " for the ingredients!",Toast.LENGTH_SHORT).show();
                     } else if(local_recipe_content.size() > 3){
                         matched_recipe_title.setText(" ");
                         matched_recipe_title.setText("Here are some matched recipes: ");
