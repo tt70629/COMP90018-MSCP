@@ -34,8 +34,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @Recipe class is the main class to display and manipulate Recipes.
+ */
 public class Recipe extends AppCompatActivity {
     private String title;
+    // Default value is given to 'key' to avoid NullPointer Exception
     private String key="-Mn04X7ikmjcvp-GqdXW";
 
     private ArrayList<String> ingredients;
@@ -191,6 +195,7 @@ public class Recipe extends AppCompatActivity {
         });
     }
 
+
     /**
      * This method is used to fetch Inventory data from database.
      */
@@ -220,6 +225,9 @@ public class Recipe extends AppCompatActivity {
 
     }
 
+    /**
+     * This method is used to fetch Checklist data from database.
+     */
     private void fetchToBuyListData() {
         daoToBuy.get().addValueEventListener(new ValueEventListener() {
             @Override

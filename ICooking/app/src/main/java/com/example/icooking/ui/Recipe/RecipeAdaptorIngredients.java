@@ -74,6 +74,9 @@ public class RecipeAdaptorIngredients extends RecyclerView.Adapter<RecipeAdaptor
         }
     }
 
+    /**
+     * Adding the ingredients that user doesn't have to Checklist.
+     */
     public void addToBuy (){
         DAObuylist daoToBuy = new DAObuylist();
         ArrayList<String> alreadyHave = new ArrayList<>();
@@ -109,6 +112,9 @@ public class RecipeAdaptorIngredients extends RecyclerView.Adapter<RecipeAdaptor
 
     }
 
+    /**
+     * Remove used ingredients from inventory.
+     */
     public void remove (){
         DAOInventory daoInventory = new DAOInventory();
         for (String i : toRemove.keySet()){
@@ -135,6 +141,9 @@ public class RecipeAdaptorIngredients extends RecyclerView.Adapter<RecipeAdaptor
         this.ingredients = list;
     }
 
+    /**
+     * Get number of ingredients.
+     */
     @Override
     public int getItemCount() {
         return ingredients.size();
@@ -148,6 +157,11 @@ public class RecipeAdaptorIngredients extends RecyclerView.Adapter<RecipeAdaptor
         }
 
     }
+
+    /**
+     * @param position
+     * Get the Key of particular ingredient.
+     */
     public String getKey(int position){
         return inventoryList.get(position).getKey();
     }
@@ -159,11 +173,19 @@ public class RecipeAdaptorIngredients extends RecyclerView.Adapter<RecipeAdaptor
         notifyDataSetChanged();
     }
 
+    /**
+     * @param ingredients
+     * Set Ingredients list.
+     */
     public void setIngredients(ArrayList<String> ingredients) {
         this.ingredients = ingredients;
         notifyDataSetChanged();
     }
 
+    /**
+     * @param toBuyList
+     * Set Checklist.
+     */
     public void setToBuyList(ArrayList<Buylist> toBuyList){
         this.toBuyList = toBuyList;
         notifyDataSetChanged();
