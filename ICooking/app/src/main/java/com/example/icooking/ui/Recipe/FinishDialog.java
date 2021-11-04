@@ -21,7 +21,6 @@ public class FinishDialog extends Dialog implements View.OnClickListener{
     private Button btnYes, btnNo;
     private IOnNoListener noListener;
     private IOnYesListener yesListener;
-    //private String title, message, yes, no;
 
     public FinishDialog(@NonNull Context context) {
         super(context);
@@ -52,8 +51,8 @@ public class FinishDialog extends Dialog implements View.OnClickListener{
     }
 
     /**
-     * Separate Yes and No button to make them do different thing.
      * @param view
+     * Separate Yes and No button to make them do different thing.
      */
     @Override
     public void onClick(View view) {

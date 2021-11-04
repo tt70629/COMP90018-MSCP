@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * The class is called mainly by Steps RecyclerView.
+ * @RecipeAdaptor class is called mainly by Steps RecyclerView.
  */
 public class RecipeAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
@@ -54,6 +54,10 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
 
+    /**
+     * @param position
+     * Return the Item view type.
+     */
     @Override
     public int getItemViewType(int position) {
         if (!images.containsKey(list.get(position))) {
@@ -62,16 +66,27 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return 1;
     }
 
+    /**
+     * Count how many items there are.
+     */
     @Override
     public int getItemCount() {
         return list.size();
     }
 
+    /**
+     * @param list
+     * Set the Recipe Steps list.
+     */
     public void setList(ArrayList<String> list){
         this.list = list;
         notifyDataSetChanged();
     }
 
+    /**
+     * @param images
+     * Set the Hashmap of images.
+     */
     public void setImages(HashMap<String, String> images){
         this.images = images;
         notifyDataSetChanged();
