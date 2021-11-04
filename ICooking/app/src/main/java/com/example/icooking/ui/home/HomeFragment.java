@@ -34,7 +34,6 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
     private HomeViewModel homeViewModel;
     private View view;
     private FragmentHomeBinding binding;
-    //public RecyclerView mRvbuy;
     private HomeAdaptor buyadaptor;
     private ArrayList<Buylist> buylist = new ArrayList<Buylist>();
     private DAObuylist daoBuylist;
@@ -46,11 +45,6 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
     private Button addbtm;
     private BottomSheetDialog bottomSheetDialogs;
 
-    /*    dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel .class);
-
-        binding = FragmentDashboardBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();*/
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -61,19 +55,13 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        /*
-        zhe li fang test data
-         */
-        //buylist = new ArrayList<Buylist>();
-        //buylist.add(new Buylist("egg"));
-        //buylist.add(new Buylist("chicken breast"));
-        //buylist.add(new Buylist("cream"));
-        //获取RECYCLERVIEW
+
+        //get RECYCLERVIEW
         final RecyclerView mRvbuy = binding.buyMain;
         final Button buybtm = binding.BoughtButton;
         final Button delbtm = binding.deletebtn;
         final Button addbum = binding.addbtn;
-        //转去ingredient的数据
+        //sent data to ingredient(button)
         buybtm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,14 +74,12 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
                 for (int i = 0; i < count; i++) {
 
                     if (buylist.get(i).isIschecked()) {
-                        //食材名字
+                        //ingredient name
                         temp.add(buylist.get(i));
                         tmpkey = buyadaptor.getKey(i);
                         keyArrayList.add(tmpkey);
-                        //给一个假设日期先
                         String etName = buylist.get(i).getBuyName();
                         // use static method from inventoryframent.
-
                         daoInventory.add(new Inventory(etName, InventoryFragment.getDefaultDateString()))
                                 .addOnSuccessListener(success -> {
                                     Toast.makeText(getContext(), "Add ingredient successfully", Toast.LENGTH_SHORT).show();
@@ -111,18 +97,13 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
                     daoBuylist.remove(keyArrayList.get(j));
                 }
 
-                //temp要给inventory；
-                //temp要给inventory；
-                //buylist.removeAll(temp);
-                //和ADD一样的结构。但是显示不能restrictlayout不能castcheckbox
                 buyadaptor.notifyDataSetChanged();
 
             }
-            //Toast.makeText(getApplicationContext(),"removed",Toast.LENGTH_SHORT).show();
 
         });
 
-        //删除
+        //delete function
         delbtm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,7 +115,7 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
                 for (int i = 0; i < count; i++) {
 
                     if (buylist.get(i).isIschecked()) {
-                        //食材名字
+                        //ingredient name
                         temp.add(buylist.get(i));
                         tmpkey = buyadaptor.getKey(i);
                         keyArrayList.add(tmpkey);
@@ -145,14 +126,9 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
                     }
                 }
 
-
-                //buylist.removeAll(temp);
-
-                //和ADD一样的结构。但是显示不能restrictlayout不能castcheckbox
                 buyadaptor.notifyDataSetChanged();
 
             }
-            //Toast.makeText(getApplicationContext(),"removed",Toast.LENGTH_SHORT).show();
 
         });
         addbum.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +142,6 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
                 EditText editName = bottomSheetDialogs.findViewById(R.id.et_tobuyName);
                 Button bsubmit = bottomSheetDialogs.findViewById(R.id.btn_addsubmit);
                 bsubmit.setText("Add");
-                //editName.setText(buylist.getBuyName());
                 assert bsubmit != null;
                 bsubmit.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -175,7 +150,6 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
                         assert editName != null;
                         if (!InventoryFragment.validateIngredientName(editName)) {
                             return;}
-                        //buylist.add(new Buylist(editName.getText().toString()));
                         buyadaptor.notifyDataSetChanged();
 
                         daoBuylist.add(new Buylist(editName.getText().toString()))
@@ -192,16 +166,13 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
 
             }
         });
-        //获取RECYCLERVIEW
-        //mRvbuy = (RecyclerView) view.findViewById(R.id.buymain);
-        //创建ADAPTER
+        //create ADAPTER
         buyadaptor = new
 
                 HomeAdaptor(this, buylist);
-        //给recyclerview设置adapter
+        //set recyclerview for adapter
         mRvbuy.setAdapter(buyadaptor);
-        //设置layoutmanager，可以设置显示效果（线性布局，grid布局，瀑布布局）
-        //参数是上下文，列表方向（横纵），是否倒叙
+        //set layoutmanager
         mRvbuy.setLayoutManager(new
 
                 LinearLayoutManager(getContext()));
@@ -209,23 +180,8 @@ public class HomeFragment extends Fragment implements HomeAdaptor.OnItemClickLis
         daoInventory = new DAOInventory();
         fetchBuyData();
 
-
-        //这里是点击出toast的活动
         RecyclerTouchListener touchListener = new RecyclerTouchListener(getActivity(), mRvbuy);
-        /*touchListener.setClickable(new RecyclerTouchListener.OnRowClickListener() {
-            @Override
-            public void onRowClicked(int position) {
-                //ConstraintLayout constraint_view = ConstraintLayout.findViewById(R.id.backcons);
-                //StringBuffer selectedbuy = new StringBuffer();
 
-                Toast.makeText(getContext(),buylist.get(position).getBuyName(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onIndependentViewClicked(int independentViewID, int position) {
-
-            }
-        });*/
         mRvbuy.addOnItemTouchListener(touchListener);
         //final View view
         return root;

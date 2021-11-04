@@ -28,8 +28,7 @@ public class Buylist {
 
     public Buylist(String BuyName) {
         this.BuyName = BuyName;
-        //this.count = count;
-        //this.key = key;
+
 
     }
 
@@ -43,13 +42,6 @@ public class Buylist {
 
     
 
-   // public String getCount() {
-   //     return count;
-   // }
-
-    //public void setCount(String count) {
-    //    this.count = count;
-    //}
 
 
     @Override
@@ -67,6 +59,5 @@ public class Buylist {
     public String getKey() {
         return key;
     }
-    //public void add(int i, Buylist buy) {
-    //}
+
 }

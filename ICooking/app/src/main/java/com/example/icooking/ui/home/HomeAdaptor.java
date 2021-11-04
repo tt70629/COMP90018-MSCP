@@ -48,10 +48,7 @@ public class HomeAdaptor extends RecyclerView.Adapter<HomeAdaptor.myViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull myViewHolder holder, int position) {
-        //根据点击位置绑定数据
-        //holder.itemgoodname.setText(buylist.get(position).getBuyName());;
-        //holder.itemgoodcount.setText(buylist.get(position).getCount());
-        //holder.itemgoodname.setChecked(buylist.get(position).isChecked());
+        //bind view to fragment
         holder.itemgoodname.setText(buylist.get(position).getBuyName().toString());
         holder.itemgoodname.setChecked(buylist.get(position).isIschecked());
         holder.itemgoodname.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -72,26 +69,14 @@ public class HomeAdaptor extends RecyclerView.Adapter<HomeAdaptor.myViewHolder> 
     public int getItemCount() {
         return buylist.size();
     }
-    /*public interface OnItemClickListen{
-        /*
-        借口中的点击每一项的实现方法，参数自己定义
-        view 点击的ITEM的视图
-        DATA 点击的item的数据
 
-        public void OnItemClick(View view, Buylist data);
-    }*/
     public class myViewHolder extends RecyclerView.ViewHolder {
-        //private ImageView itemgoodimg;
+
         private CheckBox itemgoodname;
         private TextView itemgoodcount;
-        //private CheckBox itemcheck;
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
-            //itemgoodimg = (ImageView) itemView.findViewById(R.id.)
             itemgoodname = itemView.findViewById(R.id.buyname);
-            //itemgoodcount=itemView.findViewById(R.id.itemcount);
-            //itemcheck = (CheckBox)itemView.findFocus(R.id.buyname);
-            //
         }
     }
     public interface OnItemClickListener{
