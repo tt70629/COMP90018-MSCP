@@ -105,9 +105,9 @@ public class RecipeAdaptorIngredients extends RecyclerView.Adapter<RecipeAdaptor
                 Buylist item = new Buylist(i);
                 daoToBuy.add(item);
             }
-            Toast.makeText(context, "Missing ingredients added to your ToBuy list!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Missing ingredients added to your Checklist!", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(context, "You already have all the ingredients in your ToBuy list", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "You already have all the ingredients in your Checklist", Toast.LENGTH_SHORT).show();
         }
 
     }
