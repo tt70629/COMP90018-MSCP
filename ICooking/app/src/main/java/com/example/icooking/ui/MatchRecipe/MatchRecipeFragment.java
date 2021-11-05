@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -441,10 +442,12 @@ public class MatchRecipeFragment extends Fragment {
                         }
                         if(rough_search) {
                             if(matched_number > 0){
+                                Log.d("on_rough_search",matched_number + "are matched");
                                 recipeContentList.add(recipeContent);
                             }
                         } else {
                             if (recipeContent.getIngredients().size() - matched_number < 1) {
+                                Log.d("on_rough_search","perfect match");
                                 recipeContentList.add(recipeContent);
                             }
                         }

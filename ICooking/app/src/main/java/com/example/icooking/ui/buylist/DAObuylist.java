@@ -33,9 +33,9 @@ public class DAObuylist {
     {
         if(key == null)
         {
-            return databaseReference.orderByKey();
+            return databaseReference.orderByKey().limitToFirst(100);
         }
-        return databaseReference.orderByKey().startAfter(key);
+        return databaseReference.orderByKey().startAfter(key).limitToFirst(100);
     }
 
     public Query get()

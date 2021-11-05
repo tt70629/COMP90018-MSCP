@@ -8,20 +8,21 @@ public class Buylist {
     private String BuyName;
     @Exclude
     private String key;
+    private boolean ischecked;
 
     public boolean isIschecked() {
         return ischecked;
     }
-    public Buylist() {
 
-    }
+    public Buylist() { }
+
     public void setIschecked(boolean ischecked) {
         this.ischecked = ischecked;
     }
 
     //private String count;
     //private String key;
-    private boolean ischecked;
+
 
 
     public Buylist(String BuyName) {

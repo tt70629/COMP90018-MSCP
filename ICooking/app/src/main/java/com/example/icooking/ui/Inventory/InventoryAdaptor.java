@@ -167,7 +167,8 @@ public class InventoryAdaptor extends RecyclerView.Adapter<InventoryAdaptor.View
             String daysBetween_str = Long.toString(daysBetween);
             return daysBetween_str;
         } catch (Exception e) {
-            return e.toString();
+            Log.d("getDayLeft ",e.toString());
+            return "-";
         }
 
     }

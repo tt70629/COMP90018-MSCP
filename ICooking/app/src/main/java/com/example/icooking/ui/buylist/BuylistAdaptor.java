@@ -1,5 +1,6 @@
 package com.example.icooking.ui.buylist;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,14 +51,30 @@ public class BuylistAdaptor extends RecyclerView.Adapter<BuylistAdaptor.myViewHo
     public void onBindViewHolder(@NonNull @NotNull myViewHolder holder, int position) {
         //bind view to fragment
         holder.itemgoodname.setText(buylist.get(position).getBuyName().toString());
-        holder.itemgoodname.setChecked(buylist.get(position).isIschecked());
+        holder.itemgoodname.setOnCheckedChangeListener(null);
+        if(buylist.get(position).isIschecked()){
+            holder.itemgoodname.setChecked(true);
+        }else{
+            holder.itemgoodname.setChecked(false);
+        }
         holder.itemgoodname.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(compoundButton!=null)
-                {
-                    buylist.get(position).setIschecked(b);
+                try{
+                    {
+                        if(compoundButton!=null&&buylist.get(position).isIschecked()){
+                        buylist.get(position).setIschecked(b);
+                        Log.d("click_box",buylist.get(position).getBuyName()+" is clicked as "+String.valueOf(b));
+                        }
+                        else{
+                            buylist.get(position).setIschecked(b);
+                            Log.d("click_box",buylist.get(position).getBuyName()+" is set to "+String.valueOf(b));
+                    }
+                    }
+                }catch (Exception e){
+                    Log.d("click_box_err",e.toString());
                 }
+
 
             }
         });

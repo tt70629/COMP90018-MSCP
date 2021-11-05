@@ -1,6 +1,7 @@
 package com.example.icooking.ui.buylist;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class BuylistFragment extends Fragment implements BuylistAdaptor.OnItemClickListener {
 
@@ -55,43 +57,57 @@ public class BuylistFragment extends Fragment implements BuylistAdaptor.OnItemCl
         final Button buybtm = binding.BoughtButton;
         final Button delbtm = binding.deletebtn;
         final Button addbum = binding.addbtn;
+
         //sent data to ingredient(button)
         buybtm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buylist = buyadaptor.getBuylist();
-                int count = buylist.size();
-                String tmpkey = null;
-                ArrayList temp = new ArrayList();
-                ArrayList<String> keyArrayList = new ArrayList<String>();
-                Map<String, Inventory> inventoryMap = new HashMap<>();
-                for (int i = 0; i < count; i++) {
+                try {
+                    buylist = buyadaptor.getBuylist();
+                    int count = buylist.size();
 
-                    if (buylist.get(i).isIschecked()) {
-                        //ingredient name
-                        temp.add(buylist.get(i));
-                        tmpkey = buyadaptor.getKey(i);
-                        keyArrayList.add(tmpkey);
-                        String etName = buylist.get(i).getBuyName();
-                        // use static method from inventoryframent.
-                        daoInventory.add(new Inventory(etName, InventoryFragment.getDefaultDateString()))
-                                .addOnSuccessListener(success -> {
-                                    Toast.makeText(getContext(), "Add ingredient successfully", Toast.LENGTH_SHORT).show();
+                    String tmpkey = null;
+                    AtomicReference<Boolean> all_succ= new AtomicReference<>(true);
+                    ArrayList temp = new ArrayList();
+                    ArrayList<String> keyArrayList = new ArrayList<String>();
+                    Map<String, Inventory> inventoryMap = new HashMap<>();
+                    for (int i = 0; i < count; i++) {
 
-                                }).addOnFailureListener(err -> {
-                            Toast.makeText(getContext(), err.getMessage(), Toast.LENGTH_SHORT).show();
-                        });
+                        if (buylist.get(i).isIschecked()) {
+                            //Log.d("on_add: ",String.valueOf(i)+"/"+String.valueOf(count)+" is added");
+                            //ingredient name
+                            temp.add(buylist.get(i));
+                            tmpkey = buyadaptor.getKey(i);
+                            keyArrayList.add(tmpkey);
+                            String etName = buylist.get(i).getBuyName();
+                            // use static method from inventoryframent.
+                            daoInventory.add(new Inventory(etName, InventoryFragment.getDefaultDateString()))
+                                    .addOnSuccessListener(success -> {
+
+                                        Log.d("on_add: ",etName+" is added");
+                                    }).addOnFailureListener(err -> {
+                                Toast.makeText(getContext(), err.getMessage(), Toast.LENGTH_SHORT).show();
+                                all_succ.set(false);
+                            });
+                        }
+
+
+                    }
+                    if(all_succ.get()){
+                        Toast.makeText(getContext(),"All ingredients are moved to inventory successfully!", Toast.LENGTH_SHORT).show();
                     }
 
+                    int counter = keyArrayList.size();
+                    for(int j = 0; j < counter;j++){
+                        daoBuylist.remove(keyArrayList.get(j));
+                    }
+                    buyadaptor.notifyDataSetChanged();
 
+                } catch (Exception e) {
+                    Log.d("bought_btn_err",e.toString());
+                    e.printStackTrace();
                 }
 
-                int counter = keyArrayList.size();
-                for(int j = 0; j < counter;j++){
-                    daoBuylist.remove(keyArrayList.get(j));
-                }
-
-                buyadaptor.notifyDataSetChanged();
 
             }
 
@@ -146,7 +162,7 @@ public class BuylistFragment extends Fragment implements BuylistAdaptor.OnItemCl
                             return;}
                         buyadaptor.notifyDataSetChanged();
 
-                        daoBuylist.add(new Buylist(editName.getText().toString()))
+                        daoBuylist.add(new Buylist(editName.getText().toString().trim()))
                                 .addOnSuccessListener(success -> {
                                     Toast.makeText(getContext(),"Add ingredient successfully",Toast.LENGTH_SHORT).show();
                                     bottomSheetDialogs.dismiss();
