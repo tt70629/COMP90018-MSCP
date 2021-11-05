@@ -244,7 +244,7 @@ public class MatchRecipeFragment extends Fragment {
                     last_selected.clear();
                     last_selected.addAll(selected_ingredients);
                 }
-                System.out.println(selection_changed);
+
             }
             if (run_out_choice) {
                 run_out_choice =false;
@@ -339,9 +339,6 @@ public class MatchRecipeFragment extends Fragment {
                 ArrayList<RecipeContent> add_list = new ArrayList<>();
                 Random rd = new Random();
                 int matched_number = 0;
-                for(int i=0;i<prior_ingredients.size();i++){
-                    System.out.println(prior_ingredients.get(i).getIngredientName());
-                }
                 if(prior_ingredients.size()>0){
                     for (DataSnapshot data: snapshot.getChildren()){
                         RecipeContent recipeContent = data.getValue(RecipeContent.class);
@@ -444,12 +441,10 @@ public class MatchRecipeFragment extends Fragment {
                         }
                         if(rough_search) {
                             if(matched_number > 0){
-                                System.out.println("wow: " + matched_number + "are matched");
                                 recipeContentList.add(recipeContent);
                             }
                         } else {
                             if (recipeContent.getIngredients().size() - matched_number < 1) {
-                                System.out.println("wow: " + "perfect match");
                                 recipeContentList.add(recipeContent);
                             }
                         }
@@ -462,16 +457,13 @@ public class MatchRecipeFragment extends Fragment {
                     local_recipe_content.addAll(recipeContentList);
 
                     if(local_recipe_content.size() == 0){
-                        System.out.println("dont have any");
                         initialFetchRecipeData();
                         if (smart_match){
-                            System.out.println("smart!");
                             matched_recipe_title.setText(" ");
                             matched_recipe_title.setText("No recipe matched with the selected" +
                                     " ingredients. " + "We recommend these recipes based on your " +
                                     "close-to-expiry ingredients: ");
                         } else {
-                            System.out.println("stupid");
                             matched_recipe_title.setText(" ");
                             matched_recipe_title.setText("No recipe matched with the selected " +
                                     "ingredients and close-to-expiry ingredients." +
@@ -494,7 +486,6 @@ public class MatchRecipeFragment extends Fragment {
                             int random_number = rd.nextInt(local_recipe_content.size());
                             displayed_recipe_content.add(local_recipe_content.get(random_number));
                             local_recipe_content.remove(local_recipe_content.get(random_number));
-                            System.out.println(random_number);
                         }
                         recAdaptor.setRecipeContent(displayed_recipe_content);
                     }
@@ -503,16 +494,13 @@ public class MatchRecipeFragment extends Fragment {
                     //displayed.
                 } else {
                     if(local_recipe_content.size() == 0){
-                        System.out.println("dont have any");
                         initialFetchRecipeData();
                         if (smart_match){
-                            System.out.println("smart!");
                             matched_recipe_title.setText(" ");
                             matched_recipe_title.setText("No recipe matched with the selected " +
                                     "ingredients. " + "We recommend these recipes based on " +
                                     "your close-to-expiry ingredients.");
                         } else {
-                            System.out.println("stupid");
                             matched_recipe_title.setText(" ");
                             matched_recipe_title.setText("No recipe matched with the selected" +
                                     " ingredients and close-to-expiry ingredients." +
@@ -536,7 +524,6 @@ public class MatchRecipeFragment extends Fragment {
                             int random_number = rd.nextInt(local_recipe_content.size());
                             displayed_recipe_content.add(local_recipe_content.get(random_number));
                             local_recipe_content.remove(local_recipe_content.get(random_number));
-                            System.out.println(random_number);
                         }
                         recAdaptor.setRecipeContent(displayed_recipe_content);
                     }
