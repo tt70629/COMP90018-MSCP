@@ -107,7 +107,7 @@ public class RecipeAdaptorIngredients extends RecyclerView.Adapter<RecipeAdaptor
             }
             Toast.makeText(context, "Missing ingredients added to your Checklist!", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(context, "You already have all the ingredients in your Checklist", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "You already have all the ingredients in your Checklist/Ingredients", Toast.LENGTH_SHORT).show();
         }
 
     }
