@@ -33,7 +33,7 @@ ICooking offers three main functions to users. Firstly, it provides an inventory
 
 - The notification functions are set to launch at 2pm by default, if you want to see whether the function work properly, you might need to set your machine's time to 1:59pm then run the App. You will see the notifications if you have any ingredient is gonna be expired in 3 days or has been expired
 
-## Tips to run the application
+## Future development
 
 - Currently, users are sharing the same data from the database. Therefore, we only can serve one user in this version. We will try to split the database for multiple users and create log in page for authentication. 
 
