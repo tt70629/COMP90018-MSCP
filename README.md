@@ -1,11 +1,13 @@
 # COMP90018-MSCP
 
 // Motivation and introduction of the application
+
 When hanging out to buy food, people usually remember all the goods they are going to buy in their mind or write them down on mobile note applications because they don't have a particular space to record them. Also, if they bought too much, someone probably would gradually forget what they had bought and when they bought them after putting the food into the fridge. Moreover, they might also be suffering from not knowing what to cook when they want to use ingredients in the fridge as possible as they can.  
 
 This is the motivator of using Icooking. Icooking offers three main functions to solve this problem. Initially, Icooking provides a list for users to record what they will buy before they go out. Secondly, Icooking provides an inventory list to remind users what they still have got in their fridge. Lastly, users can match recipes based on what they have in the inventory by simply tapping ingredients and clicking the search button, and then Icooking will recommend suggestions for them.
 
 // Functions details
+
 The mentioned three functions are allocated respectively in three pages. They are buy-list, inventory, and match recipes. Moreover, there's one more page for holding the detailed recipe to guide the people while cooking.
 
 On the buy-list page, people can either add, delete, and move bought ingredients to the inventory.
